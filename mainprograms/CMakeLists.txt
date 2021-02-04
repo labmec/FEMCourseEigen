@@ -1,13 +1,18 @@
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
-add_executable(FemSC main.cpp ${FemSCSOURCE})
+add_executable(TestEigen mainEigenTest.cpp ${FemSCSOURCE})
+target_link_libraries (TestEigen Eigen3::Eigen)
 
-add_executable(TestIntegrate TestIntegrate.cpp ${FemSCSOURCE})
+add_executable(Fem2021 main2021.cpp ${FemSOURCE2021} ${SOURCES2021})
+target_link_libraries (Fem2021 Eigen3::Eigen)
 
-add_executable(TestOneDProblem TestOneDProblem.cpp ${FemSCSOURCE})
+# NEED TO CHECK THESE TARGETS
+# add_executable(TestIntegrate TestIntegrate.cpp ${FemSCSOURCE})
 
-add_executable(TestTwoDProblem TestTwoDProblem.cpp ${FemSCSOURCE})
+# add_executable(TestOneDProblem TestOneDProblem.cpp ${FemSCSOURCE})
 
-add_executable(TestMatrix Testmatrix.cpp ${FemSCSOURCE})
+# add_executable(TestTwoDProblem TestTwoDProblem.cpp ${FemSCSOURCE})
 
-add_executable(Fem2018 main2018.cpp ${FemSOURCE2018} ${SOURCES2018})
+# add_executable(TestMatrix Testmatrix.cpp ${FemSCSOURCE})
+# target_link_libraries (TestMatrix Eigen3::Eigen)
 

@@ -352,10 +352,11 @@ int TestGetRow()
   cout <<__PRETTY_FUNCTION__ << endl;
   int certo = 0;
   TMatrix a;
-  TVec<double> vec;
+  VecDouble vec;
   
   cout<<"Teste 1: Verificação de GetRow em uma matriz vazia" <<endl;
-  try {
+  try
+  {
     vec = a.GetRow(1);
   } catch (std::bad_exception) {
     certo=1;
@@ -416,7 +417,7 @@ int TestGetCol()
   cout <<__PRETTY_FUNCTION__ << endl;
   
   TMatrix a;
-  TVec<double> vec;
+  VecDouble vec;
   int certo=0;
   
   cout<<"Teste 1: Verificação de GetRow em uma matriz vazia" <<endl;

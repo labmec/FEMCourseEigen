@@ -22,7 +22,7 @@ include_directories(
 #specifying the path to FemSC source code
 set(FemSCSOURCE ${FemSC_SRCS} ${FemSC_tinyxml} ${FemSC_HEAD})
 
-set(FemSOURCE2018 ${BASIC_TYPES} ${FemSC_tinyxml} ${HEADERS2018})
+set(FemSOURCE2021 ${BASIC_TYPES} ${FemSC_tinyxml} ${HEADERS2021})
 
 add_subdirectory(mainprograms)
 
@@ -40,8 +40,6 @@ if(WIN32)
 	set(CMAKE_CXX_FLAGS_DEBUG "${CMAKE_CXX_FLAGS_DEBUG} /W0")
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W0")
 endif()
-
-find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 option(USING_FAD "Whether the FAD package will be linked with the library" OFF)
 
