@@ -41,6 +41,7 @@ if(WIN32)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W0")
 endif()
 
+find_package (Eigen3 3.3 REQUIRED NO_MODULE)
 
 option(USING_FAD "Whether the FAD package will be linked with the library" OFF)
 
