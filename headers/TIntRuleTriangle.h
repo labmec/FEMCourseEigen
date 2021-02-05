@@ -10,16 +10,15 @@
 #define __FemSC__TIntRuleTriangle__
 
 #include <stdio.h>
-#include "TVec.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 
 class TIntRuleTriangle
 {
   int fOrder;
   
-  TMatrix fPoints;
+  MatrixXd fPoints;
   
-  TVec<double> fWeights;
+  VectorXd fWeights;
   
   
 public:
@@ -32,7 +31,7 @@ public:
   
   int NPoints();
   
-  void Point(int p, TVec <double> &co, double &weight);
+  void Point(int p, VectorXd &co, double &weight);
   
 };
 

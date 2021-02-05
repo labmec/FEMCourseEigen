@@ -20,12 +20,12 @@
 #include "telemento.h"
 #include "tno.h"
 #include "tmalha.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "tpanic.h"
 
 TElemento::TElemento() : fNodes(), fMaterialId(-1), fPorder(-1)
 {
-    TMatrix a(4,4,0.);
+    auto a = MatrixXi::Zero(4,4);
     
 }
 
@@ -37,7 +37,7 @@ TElemento::TElemento() : fNodes(), fMaterialId(-1), fPorder(-1)
  * nota que existe correspondencia entre o numero de nos e a ordem do elemento
  */
 
-TElemento::TElemento(int matid, int order, TVec<int> &nodes) :
+TElemento::TElemento(int matid, int order, VectorXi &nodes) :
 fNodes(nodes), fMaterialId(matid), fPorder(order)
 {
 }
@@ -48,23 +48,20 @@ TElemento::~TElemento()
 }
 
 /**
- * Cálcula o valor da função de forma em um dado ponto
- * @param pt [in] ponto onde se quer calcular o valor das funções de forma
- * @param phiValue [out] valor de cada função de forma do elemento no ponto
+ * Cï¿½lcula o valor da funï¿½ï¿½o de forma em um dado ponto
+ * @param pt [in] ponto onde se quer calcular o valor das funï¿½ï¿½es de forma
+ * @param phiValue [out] valor de cada funï¿½ï¿½o de forma do elemento no ponto
  */
 
-void TElemento::Shape1d (int order, TVec<double> & pt,TVec<double> & phi, TMatrix& dphi)
+void TElemento::Shape1d (int order, VectorXd & pt,VectorXd & phi, MatrixXd& dphi)
 {
     
-    
-    phi.Resize(order+1);
-    dphi.Resize(1, order+1);
+    phi.resize(order+1);
+    dphi.resize(1, order+1);
     for (int i=0; i<order+1; i++) {
         phi[i]=1;
         dphi(0,i)=0;
     }
-    
-    
     
     for (int i=0; i<order+1; i++) {
         double epsi=-1.+i*2./order;
@@ -104,8 +101,8 @@ void TElemento::Shape1d (int order, TVec<double> & pt,TVec<double> & phi, TMatri
 
 int TElemento::main()
 {
-    TVec<double> pt(1), phi(3);
-    TMatrix dphi(1,3);
+    VectorXd pt(1), phi(3);
+    MatrixXd dphi(1,3);
     pt[0] = 0.5;
     Shape1d(3,pt,phi,dphi);
     return 0;
@@ -121,7 +118,7 @@ void TElemento::Print(std::ostream &out)
 {
     out << "ElType " << TypeName(getElType()) << " matid " << fMaterialId << " order " << fPorder << " nodes ";
     int i;
-    for(i=0; i<fNodes.Size(); i++) out << fNodes[i] << ' ';
+    for(i=0; i<fNodes.size(); i++) out << fNodes[i] << ' ';
     out << std::endl;
 }
 
@@ -139,7 +136,7 @@ std::string TElemento::TypeName(MElementType type)
         case EPoint:
             result = "Point";
             break;
-        case ELinear:
+        case EOned:
             result = "Linear";
             break;
         case EQuadrilateral:

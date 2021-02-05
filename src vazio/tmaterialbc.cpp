@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "tmaterialbc.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "TVec.h"
 #include "tpanic.h"
 
@@ -42,17 +42,17 @@ void TMaterialBC::Print(std::ostream& out) const
 }
 
 void TMaterialBC::Contribute (double  weight,
-                              TVec<double> & philVal,
-                              TMatrix & dphi,TMatrix & elementK,
-                              TMatrix & elementF) const
+                              VectorXd & philVal,
+                              MatrixXd & dphi,MatrixXd & elementK,
+                              MatrixXd & elementF) const
 {
     
     
     if (fBCType==0) {
     
         //Dirichlet
-        for (int i=0; i<philVal.Size(); i++) {
-            for (int j=0; j<philVal.Size(); j++) {
+        for (int i=0; i<philVal.size(); i++) {
+            for (int j=0; j<philVal.size(); j++) {
                 elementK(i,j)+=philVal[i]*philVal[j]*weight*BigNumber;
             }
             elementF(i,0)+=philVal[i]*weight*BigNumber*fContrRhs;
@@ -63,7 +63,7 @@ void TMaterialBC::Contribute (double  weight,
     }else if (fBCType==1){
         
         //Neumman
-        for (int i=0; i<philVal.Size(); i++) {
+        for (int i=0; i<philVal.size(); i++) {
             
             elementF(i,0)+=philVal[i]*weight*fContrRhs;
         }
@@ -72,8 +72,8 @@ void TMaterialBC::Contribute (double  weight,
     }else if (fBCType==2){
         
         //Mista
-        for (int i=0; i<philVal.Size(); i++) {
-            for (int j=0; j<philVal.Size(); j++) {
+        for (int i=0; i<philVal.size(); i++) {
+            for (int j=0; j<philVal.size(); j++) {
                 elementK(i,j)+=philVal[i]*philVal[j]*weight*fContrStiff;
             }
             elementF(i,0)+=philVal[i]*weight*fContrRhs;

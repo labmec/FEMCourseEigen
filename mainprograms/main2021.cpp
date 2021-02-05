@@ -20,7 +20,7 @@ using std::cin;
 
 int main ()
 {
-    VecDouble vec1;
+    VectorXd vec1;
   
     return 0;
 }

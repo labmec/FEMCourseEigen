@@ -21,12 +21,10 @@
 #define TMATERIAL_H
 
 #include <iostream>
-#include "TVec.h"
-
-class TMatrix;
+#include "DataTypes.h"
 
 /**
-Implementa a interface típica de um material
+Implementa a interface tï¿½pica de um material
 
 
 @author Philippe R. B. Devloo
@@ -48,22 +46,22 @@ public:
      */
     virtual ~TMaterial();
     
-public: //funções de cálculo
+public: //funï¿½ï¿½es de cï¿½lculo
 
   /**
-   * Calcula o valor da contribuição da equação variacional no ponto dado
+   * Calcula o valor da contribuiï¿½ï¿½o da equaï¿½ï¿½o variacional no ponto dado
    * na matriz de rigidez do elemento e no vetor de carga
-   * @param pt [in]: ponto de integração de Gauss
-   * @param weight [in]: peso de integração
-   * @param phiVal [in] : valor da função teste no ponto dado
-   * @param dphi [in] : valor das derivadas da função de forma no ponto de integração
+   * @param pt [in]: ponto de integraï¿½ï¿½o de Gauss
+   * @param weight [in]: peso de integraï¿½ï¿½o
+   * @param phiVal [in] : valor da funï¿½ï¿½o teste no ponto dado
+   * @param dphi [in] : valor das derivadas da funï¿½ï¿½o de forma no ponto de integraï¿½ï¿½o
    * @param elementK [inout]: matriz de rigidez do elemento
    * @param elementF [inout]: vetor de carga do elemento
    */
   virtual void Contribute (double  weight,
-                           TVec<double> & philVal,
-                           TMatrix & dphi,TMatrix & elementK,
-                           TMatrix & elementF) const = 0; 
+                           VectorXd & philVal,
+                           MatrixXd & dphi,MatrixXd & elementK,
+                           MatrixXd & elementF) const = 0; 
 
    /**
     * Calcula a contribuicao para o erro da solucao
@@ -76,8 +74,8 @@ public: //funções de cálculo
     * @param l2 [in/out] contribuicao para norma em L2
     *
     */
-   virtual void ContributeErrorSquare(TVec<double> &x, double weight, double sol, TVec<double> &deriv,
-   	void (function)(TVec<double>& x, double &val, TVec<double>&der), double &energy, double &l2) = 0;
+   virtual void ContributeErrorSquare(VectorXd &x, double weight, double sol, VectorXd &deriv,
+   	void (function)(VectorXd& x, double &val, VectorXd&der), double &energy, double &l2) = 0;
 	
 public://Diversos
   /**

@@ -22,7 +22,7 @@
 
 #include "tmalha.h"
 #include "telemento.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 /*
 This class implements a linear analysis for a finite element simulation
 
@@ -38,12 +38,12 @@ public:
     void Run();
     
     // computes the error in energy and l2 norm
-    void Error(void (*exact) (TVec<double> &x, double &val, TVec<double> &deriv), double &energy, double &l2);
+    void Error(void (*exact) (VectorXd &x, double &val, VectorXd &deriv), double &energy, double &l2);
     
     // computes the global solution
     void uh(std::string &file_name);
     
-    void Assemble(TMatrix &stiff, TMatrix &rhs);
+    void Assemble(MatrixXd &stiff, MatrixXd &rhs);
  
 private:
 
@@ -51,10 +51,10 @@ private:
     TMalha *fMalha;
     
     // The solution of the problem
-    TMatrix fSolution;
+    MatrixXd fSolution;
 
     // Pointer to the function which computes the exact solution
-//    void (*fFunction) (TVec<double> &x, double &val, TVec<double> &deriv);
+//    void (*fFunction) (VectorXd &x, double &val, VectorXd &deriv);
     
         
 };

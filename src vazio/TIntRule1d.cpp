@@ -44,11 +44,11 @@ int TIntRule1d::NPoints()
     return npoints;
 }
 
-void TIntRule1d::Point(int p, TVec<double> &co, double &weight)
+void TIntRule1d::Point(int p, VectorXd &co, double &weight)
 {
     
-    fPoints.Resize(NPoints());
-    fWeights.Resize(NPoints());
+    fPoints.resize(NPoints());
+    fWeights.resize(NPoints());
     
     if (fOrder==0||fOrder==1) {
         
@@ -159,7 +159,7 @@ void TIntRule1d::Point(int p, TVec<double> &co, double &weight)
         DebugStop();
     }
     
-    co.Resize(1);
+    co.resize(1);
     
     co[0]=fPoints[p];
     weight=fWeights[p];
@@ -168,13 +168,13 @@ void TIntRule1d::Point(int p, TVec<double> &co, double &weight)
     
 }
 
-void TIntRule1d::gauleg(const double x1, const double x2, TVecNum<double> &x, TVecNum<double> &w)
+void TIntRule1d::gauleg(const double x1, const double x2, VectorXd &x, VectorXd &w)
 {
     const double EPS=1.0e-14;
     int m,j,i;
     double z1,z,xm,xl,pp,p3,p2,p1;
     
-    int n=x.Size();
+    int n=x.size();
     m=(n+1)/2;
     xm=0.5*(x2+x1);
     xl=0.5*(x2-x1);

@@ -21,7 +21,7 @@
 #include "telemento0d.h"
 #include "tmaterial.h"
 #include "tmalha.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "tpanic.h"
 
 TElemento0d::TElemento0d()
@@ -29,7 +29,7 @@ TElemento0d::TElemento0d()
 }
 
 
-TElemento0d::TElemento0d(int matid, int order, TVec< int >& nodes): TElemento(matid, order, nodes)
+TElemento0d::TElemento0d(int matid, int order, VectorXi & nodes): TElemento(matid, order, nodes)
 {
 }
 
@@ -44,7 +44,7 @@ std::string TElemento0d::TypeName(MElementType type)
     return TElemento::TypeName(type);
 }
 
-void TElemento0d::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
+void TElemento0d::CalcStiff(TMalha &malha, MatrixXd &stiff, MatrixXd &rhs)
 {
     //identificar o objeto material
     
@@ -53,16 +53,16 @@ void TElemento0d::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
     
     //inicializar as matrizes
     
-    stiff.Resize(1, 1);
-    rhs.Resize(1, 1);
+    stiff.resize(1, 1);
+    rhs.resize(1, 1);
     
     //Criar regra de integracao
     
-    
-    TMatrix dphi(1,1);
-    TVecNum<double> phi(1),co(1);
-    phi.Zero();
-    co.Zero();
+    MatrixXd dphi(1,1);
+    VectorXd phi(1), co(1);
+    dphi.setZero();
+    phi.setZero();
+    co.setZero();
     double weight=1.0;
     Shape(co,phi,dphi);
     mat->Contribute(weight,phi,dphi,stiff,rhs);
@@ -72,10 +72,10 @@ void TElemento0d::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
 
 }
 
-void TElemento0d::Jacobian(TVec<double> &point, TMatrix &jacobian, TMatrix &jacinv, double &detjac, TMalha &malha)
+void TElemento0d::Jacobian(VectorXd &point, MatrixXd &jacobian, MatrixXd &jacinv, double &detjac, TMalha &malha)
 {
-    jacobian.Resize(0,0);
-    jacinv.Resize(0,0);
+    jacobian.resize(0,0);
+    jacinv.resize(0,0);
     detjac = 1;
 }
 
@@ -96,11 +96,11 @@ MElementType TElemento0d::getElType()
  * @dphi valores das derivadas das funcoes de forma
  */
 
-void TElemento0d::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi)
+void TElemento0d::Shape(VectorXd &point, VectorXd &phi, MatrixXd &dphi)
 {
-    phi.Resize(1);
+    phi.resize(1);
     phi[0] = 1.;
-    dphi.Resize(1,1);
+    dphi.resize(1,1);
     dphi(0,0)=0;
 }
 
@@ -111,8 +111,8 @@ void TElemento0d::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi)
  * @param uhe combinacao linear de alpha_{i} phi_{i}
  * @param duhedx combinacao linear de alpha_{i} dphi_{i}
  */
-void TElemento0d::uhe(TMatrix &solution, TMalha &malha, TMatrix &uhe, TMatrix &duhedx){
-    uhe.Resize(0,0);
-    duhedx.Resize(0,0);
+void TElemento0d::uhe(MatrixXd &solution, TMalha &malha, MatrixXd &uhe, MatrixXd &duhedx){
+    uhe.resize(0,0);
+    duhedx.resize(0,0);
 
 }

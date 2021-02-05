@@ -43,19 +43,19 @@ public:
 
     ~TMalha();
     
-public: //inserção de nós, materiais e elementos
+public: //inserï¿½ï¿½o de nï¿½s, materiais e elementos
     /**
-     * Insere um novo nó na malha. O Retorno é o índice do elemento no vetor de nós;
+     * Insere um novo nï¿½ na malha. O Retorno ï¿½ o ï¿½ndice do elemento no vetor de nï¿½s;
      */
     int insertNode(TNo &node);
     
     /**
-     * Insere um material na malha. O Retorno é o índice do material no vetor de materiais
+     * Insere um material na malha. O Retorno ï¿½ o ï¿½ndice do material no vetor de materiais
      */
     int insertMaterial(TMaterial *mat);
     
     /**
-     * Insere um elemento na malha. O Retorno é o índice do elemento no vetor de elementos
+     * Insere um elemento na malha. O Retorno ï¿½ o ï¿½ndice do elemento no vetor de elementos
      */
     int insertElement (TElemento *el);
   
@@ -77,7 +77,7 @@ public: //Acesso a leitura dos dados da malha
     TVec <TElemento *> & getElementVec();
     
     /**
-     * Retorna um ponteiro para o nó com identificador id
+     * Retorna um ponteiro para o nï¿½ com identificador id
      */
     TNo &getNode(int id);
     
@@ -104,7 +104,7 @@ public://diversos
   
 protected:
     /**
-     * Vetor de n—s
+     * Vetor de nï¿½s
      */
     TVec<TNo> fNodes;
     

@@ -8,7 +8,7 @@
 
 #include "tmaterial2d.h"
 
-#include "TMatrix.h"
+#include "DataTypes.h"
 
 TMaterial2d::TMaterial2d(int id, double K, double C[2], double B, double F) : TMaterial(id), fK(K), fB(B), fF(F)
 {
@@ -45,12 +45,12 @@ void TMaterial2d::Print(std::ostream& out) const
  */
 
 void TMaterial2d::Contribute (double  weight,
-                              TVec<double> & philVal,
-                              TMatrix & dphix,TMatrix & elementK /*stiff*/,
-                              TMatrix & elementF /*rhs*/) const
+                              VectorXd & philVal,
+                              MatrixXd & dphix,MatrixXd & elementK /*stiff*/,
+                              MatrixXd & elementF /*rhs*/) const
 {
     int i, j, nshape;
-    nshape = philVal.Size();
+    nshape = philVal.size();
     //  std::cout<<"valor das funcoes de forma no ponto de integracao:"<<std::endl;
     //  philVal.Print();
     //  elementK.Print("K local antes do contribute");
@@ -80,12 +80,12 @@ void TMaterial2d::Contribute (double  weight,
  * @param l2 [in/out] contribuicao para norma em L2
  *
  */
-void TMaterial2d::ContributeErrorSquare(TVec<double> &x, double weight, double sol, TVec<double> &deriv,
-                                        void (function)(TVec<double>& x, double &val, TVec<double>&der), double &energy, double &l2)
+void TMaterial2d::ContributeErrorSquare(VectorXd &x, double weight, double sol, VectorXd &deriv,
+                                        void (function)(VectorXd& x, double &val, VectorXd&der), double &energy, double &l2)
 {
     double solexact=0.;
-    int dimension = deriv.Size();
-    TVec<double> derivsolexact(dimension);
+    int dimension = deriv.size();
+    VectorXd derivsolexact(dimension);
     for (int i=0; i<dimension; i++) {
         derivsolexact[i]=0.0;
     }

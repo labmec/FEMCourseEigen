@@ -2,7 +2,7 @@
 #define TVECNUM_H
 
 /*
- *  TMatrix.h
+ *  MatrixXd.h
  *
  *  Created by Eduardo Ferri on 3/6/15.
  *  Copyright 2015 LabMeC. All rights reserved.

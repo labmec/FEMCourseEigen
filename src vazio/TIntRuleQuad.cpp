@@ -38,7 +38,7 @@ void TIntRuleQuad::SetOrder(int order)
     
 }
 
-void TIntRuleQuad::Point(int p, TVec<double> &co, double &weight)
+void TIntRuleQuad::Point(int p, VectorXd &co, double &weight)
 {
     if(p<0||p>=NPoints()){
         DebugStop();
@@ -47,13 +47,13 @@ void TIntRuleQuad::Point(int p, TVec<double> &co, double &weight)
     TIntRule1d Int1Dx(fOrder);
     TIntRule1d Int1Dy(fOrder);
     
-    fPoints.Resize(NPoints(), 2);
-    fWeights.Resize(NPoints());
+    fPoints.resize(NPoints(), 2);
+    fWeights.resize(NPoints());
 
     for (int i=0; i<Int1Dx.NPoints(); i++) {
         
         Int1Dx.Point(i, co, weight);
-        TVecNum<double> coX(1);
+        VectorXd coX(1);
         double weightX;
         coX[0]=co[0];
         weightX=weight;
@@ -70,7 +70,7 @@ void TIntRuleQuad::Point(int p, TVec<double> &co, double &weight)
         
     }
     
-    co.Resize(2);
+    co.resize(2);
     
     co[0]=fPoints(p,0);
     co[1]=fPoints(p,1);
@@ -80,20 +80,20 @@ void TIntRuleQuad::Point(int p, TVec<double> &co, double &weight)
     
 }
 
-void TIntRuleQuad::gaulegQuad(const double x1, const double x2, TVecNum<double> &x, TVecNum<double> &w)
+void TIntRuleQuad::gaulegQuad(const double x1, const double x2, VectorXd &x, VectorXd &w)
 {
     
     TIntRule1d IntGauss1Dx(fOrder);
     TIntRule1d IntGauss1Dy(fOrder);
-    double nPoints = x.Size();
-    TVecNum<double> weightx(x.Size()), coX(nPoints);
-    TVecNum<double> weighty(x.Size()), coY(nPoints);
+    int nPoints = x.size();
+    VectorXd weightx(x.size()), coX(nPoints);
+    VectorXd weighty(x.size()), coY(nPoints);
     
     IntGauss1Dx.gauleg(x1, x2, coX, weightx);
     IntGauss1Dy.gauleg(x1, x2, coY, weighty);
     
-    x.Resize(2*nPoints*nPoints);
-    w.Resize(nPoints*nPoints);
+    x.resize(2*nPoints*nPoints);
+    w.resize(nPoints*nPoints);
     
     for (int i = 0; i<nPoints; i++) {
         

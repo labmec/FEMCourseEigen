@@ -24,14 +24,14 @@
 #include "tno.h"
 #include "tmalha.h"
 #include "tmaterial.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "TIntRuleTriangle.h"
 #include "TIntRule1d.h"
 #include "tpanic.h"
 #include <math.h>
 //#include "pzquad.h"
 
-TElementoTriangle::TElementoTriangle(int matid, int order, TVec< int > &nodes) : TElemento(matid, order, nodes)
+TElementoTriangle::TElementoTriangle(int matid, int order, VectorXi &nodes) : TElemento(matid, order, nodes)
 {
 }
 
@@ -51,7 +51,7 @@ MElementType TElementoTriangle::getElType()
     return ETriangle;
 }
 
-void TElementoTriangle::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
+void TElementoTriangle::CalcStiff(TMalha &malha, MatrixXd &stiff, MatrixXd &rhs)
 {
     
     
@@ -61,12 +61,12 @@ void TElementoTriangle::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
     TMaterial *mat=malha.getMaterial(matId);
     
     
-    int nshape = fNodes.Size();
+    int nshape = fNodes.size();
     
     //inicializar as matrizes
     
-    stiff.Resize(nshape, nshape);
-    rhs.Resize(nshape, 1);
+    stiff.resize(nshape, nshape);
+    rhs.resize(nshape, 1);
     
     //Criar regra de integracao
     
@@ -74,18 +74,18 @@ void TElementoTriangle::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
     int np=iRuleTriangle.NPoints();
     
     
-    TMatrix dphi(1,nshape);
-    dphi.Zero();
-    TVec<double> phi(nshape);
+    MatrixXd dphi(1,nshape);
+    dphi.setZero();
+    VectorXd phi(nshape);
     
     for (int i=0; i<np; i++) {
         double weight=0.0;
-        TVec<double> co(1);
+        VectorXd co(1);
         iRuleTriangle.Point(i,co,weight);
         Shape(co,phi,dphi);
         
-        TMatrix jacobian(2,2);
-        TMatrix jacinv(2,2);
+        MatrixXd jacobian(2,2);
+        MatrixXd jacinv(2,2);
         double detjac=0.0;
         
         Jacobian(co,jacobian,jacinv,detjac,malha);
@@ -111,35 +111,35 @@ void TElementoTriangle::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
  * @malha : objeto malha necessaria para relacionar os indices dos nos com os nos reais
  */
 
-void TElementoTriangle::Jacobian(TVec<double> &point, TMatrix &jacobian, TMatrix &jacinv, double &detjac, TMalha &malha)
+void TElementoTriangle::Jacobian(VectorXd &point, MatrixXd &jacobian, MatrixXd &jacinv, double &detjac, TMalha &malha)
 {
     
-    TVec<TNo> nos(fNodes.Size());
+    TVec<TNo> nos(fNodes.size());
     for (int ino=0; ino<nos.Size(); ino++) {
         nos[ino]=malha.getNode(fNodes[ino]);
     }
     
     
     
-    TMatrix Coord(2,fNodes.Size());
+    MatrixXd Coord(2,fNodes.size());
     
-    for (int i=0; i<fNodes.Size(); i++) {
+    for (int i=0; i<fNodes.size(); i++) {
         Coord(0,i)=nos[i].Co(0);
         Coord(1,i)=nos[i].Co(1);
     }
     
-    TVec<double> phixi(fNodes.Size());
-    TMatrix dphixi(2,fNodes.Size());
+    VectorXd phixi(fNodes.size());
+    MatrixXd dphixi(2,fNodes.size());
     
-    jacobian.Resize(2, 2);
-    jacobian.Zero();
+    jacobian.resize(2, 2);
+    jacobian.setZero();
     
-    jacinv.Resize(2, 2);
-    jacinv.Zero();
+    jacinv.resize(2, 2);
+    jacinv.setZero();
     
     this->Shape(point, phixi, dphixi);
     
-    for (int xi=0; xi<fNodes.Size(); xi++) {
+    for (int xi=0; xi<fNodes.size(); xi++) {
         jacobian(0,0)+=Coord(0,xi)*dphixi(0,xi);
         jacobian(0,1)+=Coord(0,xi)*dphixi(1,xi);
         jacobian(1,0)+=Coord(1,xi)*dphixi(0,xi);
@@ -147,11 +147,12 @@ void TElementoTriangle::Jacobian(TVec<double> &point, TMatrix &jacobian, TMatrix
         
     }
 
-	jacinv.Resize(2, 2);
-	jacinv.Zero();
+	jacinv.resize(2, 2);
+	jacinv.setZero();
 	jacinv(0, 0) = 1.;
 	jacinv(1, 1) = 1.;
-	jacobian.Solve_LU(jacinv);
+    FullPivLU<MatrixXd> jacobianLU(jacobian);
+    jacinv = jacobianLU.matrixLU();
 
 	detjac = fabs(jacobian(0, 0)*jacobian(1, 1) - jacobian(1, 0)*jacobian(0, 1));
 
@@ -166,13 +167,13 @@ void TElementoTriangle::Jacobian(TVec<double> &point, TMatrix &jacobian, TMatrix
  * @dphi valores das derivadas das funcoes de forma */
 
 
-void TElementoTriangle::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi)
+void TElementoTriangle::Shape(VectorXd &point, VectorXd &phi, MatrixXd &dphi)
 {
     
 	
-    phi.Resize(fNodes.Size());
+    phi.resize(fNodes.size());
     
-    dphi.Resize(2, fNodes.Size());
+    dphi.resize(2, fNodes.size());
     
     
 	if (fPorder==1) {
@@ -196,7 +197,7 @@ void TElementoTriangle::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &d
     
     if (fPorder==2) {
         
-        TVec<double> eps(fNodes.Size());
+        VectorXd eps(fNodes.size());
         
         eps[0]=1-point[0]-point[1];
         eps[1]=point[0];
@@ -231,7 +232,7 @@ void TElementoTriangle::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &d
     
     if (fPorder==3) {
         
-        TVec<double> eps(fNodes.Size());
+        VectorXd eps(fNodes.size());
         
         eps[0]=1-point[0]-point[1];
         eps[1]=point[0];
@@ -304,7 +305,7 @@ void TElementoTriangle::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &d
  * @param energy [out] erro na norma de energia
  * @param l2 [out] erro na norma l2
  */
-void TElementoTriangle::Error(TMatrix &solution, TMalha &malha, void (exact)(TVec<double> &, double &, TVec<double> &), double &energy, double &l2)
+void TElementoTriangle::Error(MatrixXd &solution, TMalha &malha, void (exact)(VectorXd &, double &, VectorXd &), double &energy, double &l2)
 {
 
 	int matId =	this->fMaterialId;
@@ -312,16 +313,16 @@ void TElementoTriangle::Error(TMatrix &solution, TMalha &malha, void (exact)(TVe
     
 	//calcluar as coordenadas , limites dos elementos
     
-	TVec<TNo> nos(fNodes.Size());
+	TVec<TNo> nos(fNodes.size());
 	for (int ino = 0; ino<nos.Size(); ino++) {
 		nos[ino] = malha.getNode(fNodes[ino]);
 	}
     
-	int nnodes = fNodes.Size();
+	int nnodes = fNodes.size();
     
-	TMatrix Coord(2, fNodes.Size());
+	MatrixXd Coord(2, fNodes.size());
     
-	for (int i = 0; i<fNodes.Size(); i++) {
+	for (int i = 0; i<fNodes.size(); i++) {
 		Coord(0, i) = nos[i].Co(0);
 		Coord(1, i) = nos[i].Co(1);
 	}
@@ -336,7 +337,7 @@ void TElementoTriangle::Error(TMatrix &solution, TMalha &malha, void (exact)(TVe
 	for (int ip = 0; ip<np; ip++) {
 		//calcualndo o psi-ponto de integracao
 		double weight = 0.0;
-		TVec<double> co(2);
+		VectorXd co(2);
         co[0]=0.;
         co[1]=0.;
         
@@ -344,17 +345,17 @@ void TElementoTriangle::Error(TMatrix &solution, TMalha &malha, void (exact)(TVe
 		iRuleTriangle.Point(ip, co, weight);
 		//calculando o vetor point das cordenadas em funcao de psi (volta)
         
-		TVec<double> xPoint(2);
+		VectorXd xPoint(2);
         xPoint[0]=0.;
         xPoint[1]=0.;
         
-        TVec<double> phixi(fNodes.Size());
-        TMatrix dphixi(2,fNodes.Size());
-        dphixi.Zero();
+        VectorXd phixi(fNodes.size());
+        MatrixXd dphixi(2,fNodes.size());
+        dphixi.setZero();
         
         this->Shape(co, phixi, dphixi);
         
-        for (int xi=0; xi<fNodes.Size(); xi++) {
+        for (int xi=0; xi<fNodes.size(); xi++) {
             xPoint[0]+=Coord(0,xi)*phixi[xi];
             xPoint[1]+=Coord(1,xi)*phixi[xi];
             
@@ -363,20 +364,20 @@ void TElementoTriangle::Error(TMatrix &solution, TMalha &malha, void (exact)(TVe
         
 		//calculo do jacobiano
         
-		TMatrix jacobian(2, 2);
-        jacobian.Zero();
-		TMatrix jacinv(2, 2);
-        jacinv.Zero();
+		MatrixXd jacobian(2, 2);
+        jacobian.setZero();
+		MatrixXd jacinv(2, 2);
+        jacinv.setZero();
 		double detjac = 0.0;
         
 		Jacobian(co, jacobian, jacinv, detjac, malha);
         
 		//calculo das funcoes de forma
         
-		TMatrix dphi(2, fNodes.Size());
-        dphi.Zero();
+		MatrixXd dphi(2, fNodes.size());
+        dphi.setZero();
         
-		TVec<double> phi(fNodes.Size());
+		VectorXd phi(fNodes.size());
 		Shape(co, phi, dphi);
         
 		weight = weight*fabs(detjac);
@@ -387,7 +388,7 @@ void TElementoTriangle::Error(TMatrix &solution, TMalha &malha, void (exact)(TVe
 		//calculo dos vetor de solucao e alphas
         
 		double uh = 0.;
-		TVec<double> duh(2);
+		VectorXd duh(2);
 		duh[0] = 0.;
         duh[1] = 0.;
         
@@ -407,8 +408,8 @@ void TElementoTriangle::Error(TMatrix &solution, TMalha &malha, void (exact)(TVe
     
 }
 
-void TElementoTriangle::uhe(TMatrix &solution, TMalha &malha, TMatrix &uhe, TMatrix &duhedx){
-	uhe.Resize(0, 0);
-	duhedx.Resize(0, 0);
+void TElementoTriangle::uhe(MatrixXd &solution, TMalha &malha, MatrixXd &uhe, MatrixXd &duhedx){
+	uhe.resize(0, 0);
+	duhedx.resize(0, 0);
     
 }

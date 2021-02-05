@@ -32,9 +32,9 @@ TNo::~TNo()
 {
 }
 
-TNo::TNo (TVec<double> &coordenadas)
+TNo::TNo (VectorXd &coordenadas)
 {
-    if (coordenadas.Size()!=2) {
+    if (coordenadas.size()!=2) {
         DebugStop();
     }
     
@@ -43,7 +43,7 @@ TNo::TNo (TVec<double> &coordenadas)
     
 }
 /*
- TVec<double>::iterator it;
+ VectorXd::iterator it;
  for(it=coordenadas.begin(); it!=coordenadas.end() && i<2; it++,i++)
  {
  fCoordenadas[i] = (*it);
@@ -58,9 +58,9 @@ TNo::TNo (const TNo &copy)
 }
 
 
-void TNo::setData(TVec<double> &coordenadas)
+void TNo::setData(VectorXd &coordenadas)
 {
-    if (coordenadas.Size()!=2) {
+    if (coordenadas.size()!=2) {
         DebugStop();
     }
     

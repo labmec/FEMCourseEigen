@@ -30,8 +30,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder == 0) {
         
-        fPoints.Resize(1, 2);
-        fWeights.Resize(1);
+        fPoints.resize(1, 2);
+        fWeights.resize(1);
         
         fPoints(0,0) = 0.33333333333333331;  fPoints(0,1) = 0.33333333333333331;  fWeights[0] = 0.5;
     }
@@ -39,8 +39,8 @@ int TIntRuleTriangle::NPoints()
     
     if(fOrder==1||fOrder==2){
         
-        fPoints.Resize(3, 2);
-        fWeights.Resize(3);
+        fPoints.resize(3, 2);
+        fWeights.resize(3);
         
         fPoints(0,0) = 0.16666666666666666;  fPoints(0,1) = 0.66666666666666663;  fWeights[0] = 0.16666666666666666;
         fPoints(1,0) = 0.66666666666666663;  fPoints(1,1) = 0.16666666666666666;  fWeights[1] = 0.16666666666666666;
@@ -52,8 +52,8 @@ int TIntRuleTriangle::NPoints()
     
     if(fOrder==3){
         
-        fPoints.Resize(6, 2);
-        fWeights.Resize(6);
+        fPoints.resize(6, 2);
+        fWeights.resize(6);
         
         fPoints(0,0) = 0.1628828503958919;  fPoints(0,1) = 0.6742342992082162;      fWeights[0] = 0.14057490122048982;
         fPoints(1,0) = 0.6742342992082162;  fPoints(1,1) = 0.1628828503958919;      fWeights[1] = 0.14057490122048982;
@@ -65,8 +65,8 @@ int TIntRuleTriangle::NPoints()
     
     if(fOrder==4){
         
-        fPoints.Resize(6, 2);
-        fWeights.Resize(6);
+        fPoints.resize(6, 2);
+        fWeights.resize(6);
         
         fPoints(0,0) = 0.44594849091596489;  fPoints(0,1) =  0.10810301816807023;      fWeights[0] =  0.11169079483900574;
         fPoints(1,0) = 0.10810301816807023;  fPoints(1,1) =  0.44594849091596489;      fWeights[1] =  0.11169079483900574;
@@ -79,8 +79,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==5) {
         
-        fPoints.Resize(7, 2);
-        fWeights.Resize(7);
+        fPoints.resize(7, 2);
+        fWeights.resize(7);
         
         fPoints(0,0) = 0.10128650732345634;  fPoints(0,1) = 0.79742698535308731;      fWeights[0] = 0.06296959027241357;
         fPoints(1,0) = 0.79742698535308731;  fPoints(1,1) = 0.10128650732345634;      fWeights[1] = 0.06296959027241357;
@@ -93,8 +93,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==6) {
         
-        fPoints.Resize(12, 2);
-        fWeights.Resize(12);
+        fPoints.resize(12, 2);
+        fWeights.resize(12);
         
         fPoints(0,0) = 0.063089014491502227;    fPoints(0,1) = 0.87382197101699555;         fWeights[0] = 0.025422453185103409;
         fPoints(1,0) = 0.87382197101699555;     fPoints(1,1) = 0.063089014491502227;        fWeights[1] = 0.025422453185103409;
@@ -113,8 +113,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==7) {
         
-        fPoints.Resize(15, 2);
-        fWeights.Resize(15);
+        fPoints.resize(15, 2);
+        fWeights.resize(15);
         
         fPoints(0,0) = 0.028263924156076339;    fPoints(0,1) = 0.94347215168784737;         fWeights[0] = 0.0067669312578327806;
         fPoints(1,0) = 0.94347215168784737;     fPoints(1,1) = 0.028263924156076339;        fWeights[1] = 0.0067669312578327806;
@@ -140,8 +140,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==8) {
         
-        fPoints.Resize(16, 2);
-        fWeights.Resize(16);
+        fPoints.resize(16, 2);
+        fWeights.resize(16);
         
         fPoints(0,0)= 0.33333333333333331;      fPoints(0,1)= 0.33333333333333331;    fWeights[0]= 0.072157803838893586;
         fPoints(1,0)= 0.17056930775176021;      fPoints(1,1)= 0.65886138449647957;    fWeights[1]= 0.051608685267359122;
@@ -163,8 +163,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==9) {
         
-        fPoints.Resize(19, 2);
-        fWeights.Resize(19);
+        fPoints.resize(19, 2);
+        fWeights.resize(19);
         
         fPoints(0,0)= 0.33333333333333331;         fPoints(0,1)= 0.33333333333333331;      fWeights[0]= 0.048567898141399418;
         fPoints(1,0)= 0.48968251919873762;         fPoints(1,1)= 0.020634961602524746;     fWeights[1]= 0.015667350113569536;
@@ -190,8 +190,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==10) {
         
-        fPoints.Resize(25, 2);
-        fWeights.Resize(25);
+        fPoints.resize(25, 2);
+        fWeights.resize(25);
         
         fPoints(0,0)= 0.33333333333333331;     fPoints(0,1)= 0.33333333333333331;      fWeights[0]= 0.040468714398811438;
         fPoints(1,0)= 0.42727317884677551;     fPoints(1,1)= 0.14545364230644892;      fWeights[1]= 0.038649294001481559;
@@ -223,8 +223,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==11) {
         
-        fPoints.Resize(28, 2);
-        fWeights.Resize(28);
+        fPoints.resize(28, 2);
+        fWeights.resize(28);
         
         fPoints(0,0)= 0.33333333333333331;     fPoints(0,1)= 0.33333333333333331;      fWeights[0]= 0.040588980148433582;
         fPoints(1,0)= 0.030938355245430784;    fPoints(1,1)= 0.93812328950913848;      fWeights[1]= 0.0061620217534547467;
@@ -259,8 +259,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==12) {
         
-        fPoints.Resize(33, 2);
-        fWeights.Resize(33);
+        fPoints.resize(33, 2);
+        fWeights.resize(33);
         
         fPoints(0,0)= 0.021317350453210371;    fPoints(0,1)= 0.95736529909357926;      fWeights[0]= 0.0030831305257795088;
         fPoints(1,0)= 0.95736529909357926;     fPoints(1,1)= 0.021317350453210371;     fWeights[1]= 0.0030831305257795088;
@@ -300,8 +300,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==13) {
         
-        fPoints.Resize(37, 2);
-        fWeights.Resize(37);
+        fPoints.resize(37, 2);
+        fWeights.resize(37);
         
         fPoints(0,0)= 0.33333333333333331;     fPoints(0,1)= 0.33333333333333331;      fWeights[0]= 0.03398001829341582;
         fPoints(1,0)= 0.42694141425980042;     fPoints(1,1)= 0.14611717148039918;      fWeights[1]= 0.027800983765226665;
@@ -345,8 +345,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==14) {
         
-        fPoints.Resize(46, 2);
-        fWeights.Resize(46);
+        fPoints.resize(46, 2);
+        fWeights.resize(46);
         
         fPoints(0,0)= 0.33333333333333331;     fPoints(0,1)= 0.33333333333333331;       fWeights[0]= 0.029298142613014298;
         fPoints(1,0)= 0.009979760806458432;    fPoints(1,1)= 0.98004047838708308;       fWeights[1]= 0.00086757561486263378;
@@ -400,8 +400,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==15) {
         
-        fPoints.Resize(52, 2);
-        fWeights.Resize(52);
+        fPoints.resize(52, 2);
+        fWeights.resize(52);
         
         fPoints(0,0) = 0.33333333333333331;     	 fPoints(0,1) = 0.33333333333333331;      fWeights[0] =  0.022019355439217139;
         fPoints(1,0) = 0.22733221881914287;      	fPoints(1,1) = 0.54533556236171421;      fWeights[1] =  0.023092393591013491;
@@ -461,8 +461,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==16) {
         
-        fPoints.Resize(55, 2);
-        fWeights.Resize(55);
+        fPoints.resize(55, 2);
+        fWeights.resize(55);
         
         fPoints(0,0)= 0.33333333333333331;     fPoints(0,1)= 0.33333333333333331;      fWeights[0]= 0.024011094340188544;
         fPoints(1,0)= 0.081794983131373872;    fPoints(1,1)= 0.8364100337372522;       fWeights[1]= 0.0073545501534009634;
@@ -525,8 +525,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==17) {
         
-        fPoints.Resize(61, 2);
-        fWeights.Resize(61);
+        fPoints.resize(61, 2);
+        fWeights.resize(61);
         
         fPoints(0,0)= 0.33333333333333331;     fPoints(0,1)= 0.33333333333333331;       fWeights[0]= 0.022378435722172314;
         fPoints(1,0)= 0.095698508862710946;    fPoints(1,1)= 0.80860298227457816;      fWeights[1]= 0.0086834425133738985;
@@ -594,8 +594,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==18) {
         
-        fPoints.Resize(72, 2);
-        fWeights.Resize(72);
+        fPoints.resize(72, 2);
+        fWeights.resize(72);
         
         fPoints(0,0)= 0.073270886464382831;    fPoints(0,1)= 0.85345822707123431;      fWeights[0]= 0.0069889308226430101;
         fPoints(1,0)= 0.85345822707123431;     fPoints(1,1)= 0.073270886464382831;     fWeights[1]= 0.0069889308226430101;
@@ -674,8 +674,8 @@ int TIntRuleTriangle::NPoints()
     
     if (fOrder==19) {
         
-        fPoints.Resize(73, 2);
-        fWeights.Resize(73);
+        fPoints.resize(73, 2);
+        fWeights.resize(73);
         
         fPoints(0 ,0)= 0.33333333333333331; fPoints(0,1)= 0.33333333333333331;fWeights[0]= 0.016453165694459326;
         fPoints(1 ,0)= 0.48960998707300635; fPoints(1,1)= 0.020780025853987336;fWeights[1]= 0.0051653659456360268;
@@ -752,19 +752,19 @@ int TIntRuleTriangle::NPoints()
         fPoints(72 ,0)= 0.065494628082937698; fPoints(72,1)= 0.92434425262078401;fWeights[72]= 0.001899964427650957;
     }
     
-    return fWeights.Size();
+    return fWeights.size();
 }
 
-void TIntRuleTriangle::Point(int p, TVec<double> &co, double &weight)
+void TIntRuleTriangle::Point(int p, VectorXd &co, double &weight)
 {
     
     
-    if (p<0||p>=fWeights.Size()) {
+    if (p<0||p>=fWeights.size()) {
         DebugStop();
     }
 
     
-    co.Resize(2);
+    co.resize(2);
     
     co[0]=fPoints(p,0);
     co[1]=fPoints(p,1);

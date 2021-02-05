@@ -81,7 +81,7 @@ static int GetVTK_ElType(ElementType ElType)
     return elType;
 }
 
-static TMatrix NodeCoordinates(ElementType eltype)
+static MatrixXd NodeCoordinates(ElementType eltype)
 {
     double quadco[8][2] = {
         {-1,-1},
@@ -113,30 +113,30 @@ static TMatrix NodeCoordinates(ElementType eltype)
         {0.5,0,0.5},
         {0,0.5,0.5}
     };
-    TMatrix result;
+    MatrixXd result;
     switch (eltype) {
         case EOned:
-            result.Resize(3, 1);
+            result.resize(3, 1);
             result(0,0) = -1.;
             result(1,0) = 1.;
             result(2,0) = 0.;
             break;
         case EQuadrilateral:
-            result.Resize(8, 2);
+            result.resize(8, 2);
             for (int i=0; i<8; i++) {
                 result(i,0) = quadco[i][0];
                 result(i,1) = quadco[i][1];
             }
             break;
         case ETriangle:
-            result.Resize(6, 2);
+            result.resize(6, 2);
             for (int i=0; i<6; i++) {
                 result(i,0) = triangle[i][0];
                 result(i,1) = triangle[i][1];
             }
             break;
         case ETetraedro:
-            result.Resize(10, 3);
+            result.resize(10, 3);
             for (int i=0; i<10; i++) {
                 result(i,0) = tetra[i][0];
                 result(i,1) = tetra[i][1];
@@ -178,7 +178,7 @@ void VTKGeoMesh::PrintGMeshVTK(GeoMesh * gmesh, const std::string &filename)
             continue;
         }
        
-        TMatrix ParamCo = NodeCoordinates(gel->Type());
+        MatrixXd ParamCo = NodeCoordinates(gel->Type());
         int elNnodes = ParamCo.Rows();
         
         Size += (1+elNnodes);
@@ -253,7 +253,7 @@ void VTKGeoMesh::PrintCMeshVTK(CompMesh *cmesh, int dim, const std::string &file
     {
         gel = cel->GetGeoElement();
         
-        TMatrix ParamCo = NodeCoordinates(gel->Type());
+        MatrixXd ParamCo = NodeCoordinates(gel->Type());
         int elNnodes = ParamCo.Rows();
         
         Size += (1+elNnodes);
@@ -269,7 +269,7 @@ void VTKGeoMesh::PrintCMeshVTK(CompMesh *cmesh, int dim, const std::string &file
             }
             node << std::endl;
             VecDouble sol(1);
-            TMatrix dsol(2,1);
+            MatrixXd dsol(2,1);
             cel->Solution(xi, sol, dsol);
             solution << sol[0] << " " << std::endl;
             int i;

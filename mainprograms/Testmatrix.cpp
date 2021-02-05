@@ -2,7 +2,7 @@
 
 #include <iostream>
 #include <math.h>
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "tmalha.h"
 #include "TVec.h"
 
@@ -15,7 +15,7 @@ using std::endl;
 using std::cin;
 
 /// verifica se o vetor funciona e eh robusto
-void TestMatrix();
+void TesMatrixXd();
 int TestSolve_LUl();
 
 int main ()
@@ -34,7 +34,7 @@ int ConstructorWrongArg()
   int certo = 0;
   cout << "Teste 1: contrutor inicializado com parametros negativos" <<endl;
   try {
-    TMatrix a(-1,-1);
+    MatrixXd a(-1,-1);
   } catch (std::bad_exception) {
     certo = 1;
   }
@@ -48,7 +48,7 @@ int ElementOutOfScope()
 {
   cout <<__PRETTY_FUNCTION__<<endl;
   int certo = 0;
-  TMatrix vec(5,5);
+  MatrixXd vec(5,5);
   
   cout <<"Teste 1: selecao de elementos negativos e fora do escopo." <<endl;
   try {
@@ -70,8 +70,8 @@ int CopyConstructor()
   cout<<"Teste 1: inicializacao basica de construtor de copia"<<endl;
   int certo = 1;
   try {
-    TMatrix a(1000,10);
-    TMatrix b(a);
+    MatrixXd a(1000,10);
+    MatrixXd b(a);
     
   } catch (...){
     std::cout << "Teste 1: Errado!\n";
@@ -91,8 +91,8 @@ int EqualOperator()
   cout<<"Teste 1: Teste  de funcionamento operador igual"<<endl;
   int certo = 0;
   try {
-    TMatrix a(1000,1);
-    TMatrix b;
+    MatrixXd a(1000,1);
+    MatrixXd b;
     b = a;
     
   } catch (...) {
@@ -113,9 +113,9 @@ int NullSizeMatrix()
   cout<<"Teste 1: matriz de tamanho zero, atribuicao com operador igual e construtor de copia"<<endl;
   int certo = 1;
   try {
-    TMatrix a(0,0);
-    TMatrix b;
-    TMatrix c(a);
+    MatrixXd a(0,0);
+    MatrixXd b;
+    MatrixXd c(a);
     b = a;
     
   } catch (...) {
@@ -134,7 +134,7 @@ int TestPutVal ()
 {
   cout<<__PRETTY_FUNCTION__<<endl;
   int certo = 1;
-  TMatrix Teste (3,3);
+  MatrixXd Teste (3,3);
   Teste.PutVal(1, 2, 5.);
   
   cout<<"Teste 1: verificação se PutVal e GetVal."<<endl;
@@ -192,7 +192,7 @@ int TestPutVal ()
 int TestGetVal ()
 {
   int certo = 1;
-  TMatrix Teste (3,3);
+  MatrixXd Teste (3,3);
   Teste .PutVal(1, 2, 5.);
   
   certo = 0;
@@ -242,7 +242,7 @@ int TestGetVal ()
 int TestRows(void)
 {
   cout <<__PRETTY_FUNCTION__<<endl;
-  TMatrix Teste (132,4);
+  MatrixXd Teste (132,4);
   int certo = 1;
   cout<<"Teste 1: Verificacao de retorno."<<endl;
   if (Teste .Rows() != 132) {
@@ -257,7 +257,7 @@ int TestRows(void)
 ///Retorna o numero de colunas que a matriz possui;
 int TestCols(void)
 {
-  TMatrix Teste (3,87);
+  MatrixXd Teste (3,87);
   int certo = 1;
   
   cout<<"Teste 1: Verificacao de retorno."<<endl;
@@ -275,7 +275,7 @@ int TestCols(void)
 int TestResize()
 {
   //CONTRUCAO DE UMA MATRIZ RANDOM
-  TMatrix a(5,10);
+  MatrixXd a(5,10);
   for (int i=0; i<a.Rows(); i++) {
     for (int j=0; j<a.Cols(); j++) {
       a(i,j) = rand();
@@ -284,7 +284,7 @@ int TestResize()
   int certo = 1;
   
   cout<<"Teste 1: truncamento e expancao, de 5x10 -> 20x5" <<endl;
-  TMatrix b(a);
+  MatrixXd b(a);
   b.Resize(20, 5);
   for (int i=0; i<b.Rows(); i++) {
     for (int j=0; j<b.Cols(); j++) {
@@ -308,7 +308,7 @@ int TestTranspose()
 {
   cout<<__PRETTY_FUNCTION__<<endl;
   int certo = 0;
-  TMatrix a;
+  MatrixXd a;
   cout <<"Teste 1: Transposicao de uma matriz vazia."<<endl;
   try {
     a.Transpose();
@@ -326,7 +326,7 @@ int TestTranspose()
     }
   }
   //copia da matriz a para b;
-  TMatrix b(a);
+  MatrixXd b(a);
   //transposicao da matriz b;
   b.Transpose();
   
@@ -351,7 +351,7 @@ int TestGetRow()
   
   cout <<__PRETTY_FUNCTION__ << endl;
   int certo = 0;
-  TMatrix a;
+  MatrixXd a;
   VecDouble vec;
   
   cout<<"Teste 1: Verificação de GetRow em uma matriz vazia" <<endl;
@@ -410,13 +410,13 @@ int TestGetRow()
 }
 
 ///Retorna um vetor do tamanho do numero de linhas da matriz referente a coluna col;
-//TVec<double> GetCol(int col) const;
+//VectorXd GetCol(int col) const;
 
 int TestGetCol()
 {
   cout <<__PRETTY_FUNCTION__ << endl;
   
-  TMatrix a;
+  MatrixXd a;
   VecDouble vec;
   int certo=0;
   
@@ -475,13 +475,13 @@ int TestGetCol()
 }
 
 ///Decompoe e resolve o sistema
-//void Solve_LU(TMatrix &rhs); // why here?
+//void Solve_LU(MatrixXd &rhs); // why here?
 int TestSolve_LUl()
 {
     cout <<__PRETTY_FUNCTION__ << endl;
     
-    TMatrix a,b;
-    TVec<double> vec;
+    MatrixXd a,b;
+    VectorXd vec;
     int certo=0;
     
     cout<<"Teste 1: Verificação de resolução de sistema, matriz vazia" <<endl;
@@ -526,7 +526,7 @@ int TestSolve_LUl()
     
     //definicao de uma matriz não singular e uma matriz cópia;
     
-    TMatrix c(4,4,0.0);
+    MatrixXd c(4,4,0.0);
     TVecNum<double> sumrow(c.Rows());
     for (int i=0; i<c.Rows(); i++) {
         for (int j=0; j<c.Cols(); j++) {
@@ -540,7 +540,7 @@ int TestSolve_LUl()
     
     //c.Print();
     
-    TMatrix ccp;
+    MatrixXd ccp;
     ccp=c;
     c.Solve_LU(ccp);
     
@@ -566,7 +566,7 @@ int TestSolve_LUl()
     
     //definicao de uma matriz não singular e um vetor cujos elemntos são a soma de cada linha da matriz;
     
-    TMatrix d(3,3,0.0),e(3,1,0.0);
+    MatrixXd d(3,3,0.0),e(3,1,0.0);
     
     TVecNum<double> sumrowd(d.Rows()),sumrowe(d.Rows());
     for (int i=0; i<d.Rows(); i++) {
@@ -612,7 +612,7 @@ int TestSelectOperator()
   cout<<__PRETTY_FUNCTION__<<endl;
   
   int certo = 1;
-  TMatrix a(10,15,9);
+  MatrixXd a(10,15,9);
   
   cout<<"Teste 1: verificacao de funcionalidade do operador"<<endl;
   double Teste  = -78;
@@ -624,7 +624,7 @@ int TestSelectOperator()
   else cout <<"Teste 1: Errado."<<endl;
   
   //matriz vazia;
-  TMatrix b;
+  MatrixXd b;
   
   cout<<"Teste 2: acesso de posicao negativa na matriz"<<endl;
   certo = 0;
@@ -660,13 +660,13 @@ int TestSelectOperator()
 }
 
 ///Soma os elementos de duas matrizes de mesmo tamanho, retornando uma matriz com este valor;
-//TMatrix operator +(TMatrix &fator);
+//MatrixXd operator +(MatrixXd &fator);
 
 int TestPlusOperator ()
 {
   cout <<__PRETTY_FUNCTION__<<endl;
   int  certo = 1;
-  TMatrix fat1, fat2, Result;
+  MatrixXd fat1, fat2, Result;
   
   cout<<"Teste 1:soma de matrizes vazias"<<endl;
   certo=0;
@@ -734,12 +734,12 @@ int TestPlusOperator ()
 }
 
 ///Subtrai os elementos de duas matrizes de mesmo tamanho, retornando uma matriz com este valor;
-//TMatrix operator -(TMatrix &fator);
+//MatrixXd operator -(MatrixXd &fator);
 int TestMinusOperator ()
 {
   cout <<__PRETTY_FUNCTION__<<endl;
   int  certo = 1;
-  TMatrix fat1, fat2, Result;
+  MatrixXd fat1, fat2, Result;
   
   cout<<"Teste 1: subtracao de matrizes vazias."<<endl;
   certo=0;
@@ -805,13 +805,13 @@ int TestMinusOperator ()
 }
 
 ///Multiplica todos os elementos de uma matriz por um double m;
-//TMatrix &operator *(double m);
+//MatrixXd &operator *(double m);
 int TestScalarOperator ()
 {
   cout <<__PRETTY_FUNCTION__<<endl;
   int certo = 0;
   double esc = 2.;
-  TMatrix a;
+  MatrixXd a;
   
   cout <<"Teste 1: escalar multiplicado por matriz vazia."<<endl;
   try {
@@ -829,7 +829,7 @@ int TestScalarOperator ()
     }
   }
   
-  TMatrix b;
+  MatrixXd b;
   b = a*esc;
   
   cout <<"Teste 2: congruencia de valores."<<endl;
@@ -848,12 +848,12 @@ int TestScalarOperator ()
 }
 
 ///Multiplica duas matrizes respeitando as regras da algebra linear;
-//TMatrix operator *(TMatrix &fator);
-int TestMatrixOperator ()
+//MatrixXd operator *(MatrixXd &fator);
+int TesMatrixXdOperator ()
 {
   cout <<__PRETTY_FUNCTION__<<endl;
   int certo = 1;
-  TMatrix fat1, fat2, res;
+  MatrixXd fat1, fat2, res;
   
   cout <<"Teste 1: Multiplicacao de matrizes vazias."<<endl;
   try {
@@ -889,7 +889,7 @@ int TestMatrixOperator ()
   cout <<"Teste 3: Congruencia dos valores."<<endl;
   fat2.Resize(2, 7);
   res = fat1*fat2;
-  TMatrix mult(3,7,0.);
+  MatrixXd mult(3,7,0.);
   for (int i=0; i<mult.Rows(); i++) {
     for (int j=0; j<mult.Cols(); j++) {
       for (int k=0; k<fat1.Cols(); k++) {
@@ -912,13 +912,13 @@ int TestMatrixOperator ()
 }
 
 ///Multiplica uma matriz por um vetor vec e retorna um valor de mesmo tamanho vec (respeita as regras da algebra linear);
-//TVec<double> operator *(TVec<double> &vec);
+//VectorXd operator *(VectorXd &vec);
 int TestVecMatrix ()
 {
   cout <<__PRETTY_FUNCTION__<<endl;
   int certo = 1;
   TVecNum<double> a, res;
-  TMatrix mat;
+  MatrixXd mat;
   
   cout<<"Teste 1: elementos da multiplicacao vazios" <<endl;
   try {
@@ -963,7 +963,7 @@ int TestVecMatrix ()
   a.Resize(3);
   res = mat*a;
   TVecNum<double> mult(mat.Rows());
-  mult.Zero();
+  mult.setZero();
   for (int j=0; j<mat.Rows(); j++) {
     for (int i=0; i<mat.Cols(); i++) {
       mult[j] += mat.GetVal(j,i)*a[i];
@@ -983,14 +983,14 @@ int TestVecMatrix ()
 }
 
 ///Compara duas matrizes e retorna true ou false;
-//bool operator == (TMatrix &mat2);
+//bool operator == (MatrixXd &mat2);
 int CompareMatrix()
 {
   
   cout <<__PRETTY_FUNCTION__<<endl;
   int certo = 1;
   
-  TMatrix a,b;
+  MatrixXd a,b;
   
   cout <<"Teste 1: bool functions entre funcoes vazias" <<endl;
   try {
@@ -1034,7 +1034,7 @@ int CompareMatrix()
   
   
   cout <<"Teste 4: congruencia de valores." <<endl;
-  TMatrix c(b);
+  MatrixXd c(b);
   for (int i=0; i<b.Rows(); i++) {
     for (int j=0; j<b.Cols(); j++) {
       if (c(i,j) != b(i,j)) {
@@ -1052,7 +1052,7 @@ int CompareMatrix()
 
 
 /// verifica se o vetor funciona e eh robusto
-void TestMatrix()
+void TesMatrixXd()
 {
   if( (
        CompareMatrix() &&

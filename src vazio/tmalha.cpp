@@ -24,7 +24,7 @@
 #include "telemento0d.h"
 #include "tmaterialbc.h"
 #include "tmaterial1d.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "tpanic.h"
 
 TMalha::TMalha() : fNodes(), fElements(), fMaterials()
@@ -100,8 +100,8 @@ TElemento * TMalha::getElement (int i)
 void TMalha::Print(std::ostream &out)
 {
     int i;
-    out << "Impress‹o da malha" << std::endl;
-    out << "Vetor de Nos - número de nos = " << fNodes.Size() << std::endl;
+    out << "Impressï¿½o da malha" << std::endl;
+    out << "Vetor de Nos - nï¿½mero de nos = " << fNodes.Size() << std::endl;
     for (i=0;i<fNodes.Size();i++)
     {
         out << "Ind " << i << ' ';

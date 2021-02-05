@@ -29,15 +29,15 @@
 class TElemento1d : public TElemento
 {
 public:
-    TElemento1d(int matid, int order, TVec< int >& nodes);
+    TElemento1d(int matid, int order, VectorXi & nodes);
     
     TElemento1d();
 
     ~TElemento1d();
 
     virtual MElementType getElType();
-    virtual void CalcStiff(TMalha &malha, TMatrix& stiff, TMatrix& rhs);
-    virtual void Jacobian(TVec<double> &point, TMatrix& jacobian, TMatrix& jacinv, double &detjac, TMalha& malha);
+    virtual void CalcStiff(TMalha &malha, MatrixXd& stiff, MatrixXd& rhs);
+    virtual void Jacobian(VectorXd &point, MatrixXd& jacobian, MatrixXd& jacinv, double &detjac, TMalha& malha);
     
     
     /*
@@ -46,7 +46,7 @@ public:
      * @phi valores das funcoes de forma
      * @dphi valores das derivadas das funcoes de forma
      */
-    virtual void Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi);
+    virtual void Shape(VectorXd &point, VectorXd &phi, MatrixXd &dphi);
     
     /**
      * Calcula o erro do elemento
@@ -54,7 +54,7 @@ public:
      * @param energy [out] erro na norma de energia
      * @param l2 [out] erro na norma l2
      */
-virtual void Error(TMatrix &solution, TMalha &malha, void (*f)(TVec<double> &,double &, TVec<double> &), double &energy, double &l2);
+virtual void Error(MatrixXd &solution, TMalha &malha, void (*f)(VectorXd &,double &, VectorXd &), double &energy, double &l2);
     
     /**
      * Calcula o a solucao e o gradiente do elemento
@@ -63,7 +63,7 @@ virtual void Error(TMatrix &solution, TMalha &malha, void (*f)(TVec<double> &,do
      * @param uhe combinacao linear de alpha_{i} phi_{i}
      * @param duhedx combinacao linear de alpha_{i} dphi_{i}
      */
-virtual void uhe(TMatrix &solution, TMalha &malha, TMatrix &uhe, TMatrix &duhedx);
+virtual void uhe(MatrixXd &solution, TMalha &malha, MatrixXd &uhe, MatrixXd &duhedx);
 
 
 };

@@ -48,10 +48,10 @@ public:
         int nstate = coefs.size()/phi.size();
         solution.resize(nstate);
         for(auto &solval:solution) solval = 0.;
-        dsoldksi.Resize(dphidx.Rows(), nstate);
-        dsoldx.Resize(dphidx.Rows(), nstate);
-        dsoldx.Zero();
-        dsoldksi.Zero();
+        dsoldksi.resize(dphidx.Rows(), nstate);
+        dsoldx.resize(dphidx.Rows(), nstate);
+        dsoldx.setZero();
+        dsoldksi.setZero();
         int dim = dphidx.Rows();
         for (int iphi=0; iphi<phi.size(); iphi++) {
             double phival = phi[iphi];

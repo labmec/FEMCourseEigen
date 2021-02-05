@@ -2,7 +2,6 @@
 
 #include <iostream>
 #include <math.h>
-#include <TMatrix.h>
 #include <Eigen/Core>
 #include <Eigen/Dense>
 
@@ -11,11 +10,11 @@ using namespace std;
 
 int main ()
 {
-    TVec<double> vec1;
+    VectorXd vec1;
 
     // Testing Eigen matrix
     // Copied from: https://gitlab.com/libeigen/eigen/-/blob/master/doc/examples/QuickStart_example.cpp 
-    MatrixXd m(2,2);
+    MatrixXd m(2,2); // matrix composed by doubles.
     m(0,0) = 3;
     m(1,0) = 2.5;
     m(0,1) = -1;

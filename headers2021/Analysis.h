@@ -8,6 +8,7 @@
 #ifndef Analysis_h
 #define Analysis_h
 
+#include <Eigen/Dense>
 #include "DataTypes.h"
 class CompMesh;
 class PostProcess;
@@ -20,11 +21,11 @@ protected:
     
     CompMesh *cmesh;
     
-    Matrix Solution;
+    MatrixXd Solution;
     
-    Matrix GlobalSystem;
+    MatrixXd GlobalSystem;
     
-    Matrix RightHandSide;
+    MatrixXd RightHandSide;
     
 public:
     

@@ -34,7 +34,7 @@ public:
     static int SideNodeIndex(int side, int node);
     
     // Return the enumerated element type
-    static ElementType Type();
+    static MElementType Type();
 };
 
 #endif /* Topology1d_h */

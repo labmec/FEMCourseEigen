@@ -2,7 +2,7 @@
 
 file(GLOB sources *.cpp)
 
-file(GLOB locsources TMatrix.cpp)
+file(GLOB locsources MatrixXd.cpp)
 
 set(FemSC_SRCS ${sources} PARENT_SCOPE)
 

@@ -92,7 +92,7 @@ public:
     }
     
     // Return the enumerated element type
-    virtual ElementType Type();
+    virtual MElementType Type();
     
     // Compute x mapping from local parametric coordinates
     virtual void X(const VecDouble &xi, VecDouble &x);

@@ -25,29 +25,23 @@ U General Public License for more details.          t WI                *
 
 class TMalha;
 
-//class TPZMatrix;
-//class TMatrix;
-
-#include "TVec.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include <iostream>
 #include <string>
 /**
-Classe virtual que implementa a interface básica de um elemento
+Classe virtual que implementa a interface bï¿½sica de um elemento
 
 @author Philippe R. B. Devloo
 */
 /**
- * Definição dos tipos de elementos
+ * Definiï¿½ï¿½o dos tipos de elementos
  */
- 
-enum MElementType { EPoint, ELinear, ETriangle, EQuadrilateral };
 
 class TElemento{
 public:
     /**
      * Construtor vazio - inicializar com valores que indiquem falta de 
-     * inicialização
+     * inicializaï¿½ï¿½o
      */
     TElemento();
     
@@ -58,17 +52,17 @@ public:
      * @nodes : indices dos nos
      * nota que existe correspondencia entre o numero de nos e a ordem do elemento
      */
-     TElemento(int matid, int order, TVec<int> &nodes);
+     TElemento(int matid, int order, VectorXi &nodes);
     
     /**
-     * Destrutor padrão
+     * Destrutor padrï¿½o
      */
     ~TElemento();
     
     /**
      * Metodo para acesso aos nos do elemento
      */
-     const TVec<int> &getNodeVec() const
+     const VectorXi &getNodeVec() const
      {
        return fNodes;
      }
@@ -79,23 +73,23 @@ public: //Acesso a leitura dos dados da classe
      */
     virtual MElementType getElType()=0;
 
-public: //Métodos de cálculo
+public: //Mï¿½todos de cï¿½lculo
     
     static int main();
     
 public:
 
     /**
-     * Cálcula o valor da função de forma em um dado ponto
-     * @param pt [in] ponto onde se quer calcular o valor das funções de forma
-     * @param phiValue [out] valor de cada função de forma do elemento no ponto
+     * Cï¿½lcula o valor da funï¿½ï¿½o de forma em um dado ponto
+     * @param pt [in] ponto onde se quer calcular o valor das funï¿½ï¿½es de forma
+     * @param phiValue [out] valor de cada funï¿½ï¿½o de forma do elemento no ponto
      */
-    static void Shape1d (int order, TVec<double> & pt,TVec<double> & phi, TMatrix &dphi);
+    static void Shape1d (int order, VectorXd & pt, VectorXd & phi, MatrixXd &dphi);
     
     /**
      * Calcula a matriz de rigidez local
      */
-    virtual void CalcStiff (TMalha &malha, TMatrix &stiff, TMatrix &rhs) = 0;
+    virtual void CalcStiff (TMalha &malha, MatrixXd &stiff, MatrixXd &rhs) = 0;
     
     /**
      * Calculo do jacobiano
@@ -105,7 +99,7 @@ public:
      * @malha : objeto malha necessaria para relacionar os indices dos nos com os nos reais
      * 
      */
-     virtual void Jacobian(TVec<double> &point, TMatrix &jacobian, TMatrix &jacinv, double &detjac, TMalha &malha) = 0;
+     virtual void Jacobian(VectorXd &point, MatrixXd &jacobian, MatrixXd &jacinv, double &detjac, TMalha &malha) = 0;
      
      /**
       * return the string corresponding to the type
@@ -123,7 +117,7 @@ public:
      * @phi valores das funcoes de forma
      * @dphi valores das derivadas das funcoes de forma
      */
-    virtual void Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi) = 0;
+    virtual void Shape(VectorXd &point, VectorXd &phi, MatrixXd &dphi) = 0;
     
     /**
      * Calcula o erro do elemento
@@ -131,7 +125,7 @@ public:
      * @param energy [out] erro na norma de energia
      * @param l2 [out] erro na norma l2
      */
-virtual void Error(TMatrix &solution, TMalha &malha, void (*f)(TVec<double> &,double &, TVec<double> &), double &energy, double &l2) = 0;
+virtual void Error(MatrixXd &solution, TMalha &malha, void (*f)(VectorXd &,double &, VectorXd &), double &energy, double &l2) = 0;
     
     /**
      * Calcula o a solucao e o gradiente do elemento
@@ -140,7 +134,7 @@ virtual void Error(TMatrix &solution, TMalha &malha, void (*f)(TVec<double> &,do
      * @param uhe combinacao linear de alpha_{i} phi_{i}
      * @param duhedx combinacao linear de alpha_{i} dphi_{i}
      */
-    virtual void uhe(TMatrix &solution, TMalha &malha, TMatrix &uhe, TMatrix &duhedx) = 0 ;
+    virtual void uhe(MatrixXd &solution, TMalha &malha, MatrixXd &uhe, MatrixXd &duhedx) = 0 ;
     
     /**
      * Retorna o indice material associado ao elemento
@@ -153,18 +147,18 @@ virtual void Error(TMatrix &solution, TMalha &malha, void (*f)(TVec<double> &,do
 protected:
     
     /**
-     * Vetor de ponteiros para os nós. Os nós são armazenados
+     * Vetor de ponteiros para os nï¿½s. Os nï¿½s sï¿½o armazenados
      * na malha
      */
-    TVec<int> fNodes;
+    VectorXi fNodes;
     
     /**
-     * Referência para o índice do material na malha
+     * Referï¿½ncia para o ï¿½ndice do material na malha
      */
     int fMaterialId;
     
     /**
-     * Ordem de interpolação p
+     * Ordem de interpolaï¿½ï¿½o p
      */
     int fPorder;
     

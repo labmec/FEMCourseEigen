@@ -11,16 +11,16 @@
 
 #include <cmath>
 #include <stdio.h>
-#include "TVecNum.h"
+#include "DataTypes.h"
 
 class TIntRule1d
 {
   
   int fOrder;
   
-  TVecNum<double> fPoints;
+  VectorXd fPoints;
   
-  TVecNum<double> fWeights;
+  VectorXd fWeights;
     
 public:
   
@@ -32,9 +32,9 @@ public:
     
     int NPoints();
     
-    void Point(int p, TVec<double> &co, double &weight);
+    void Point(int p, VectorXd &co, double &weight);
     
-    void gauleg(const double x1, const double x2, TVecNum<double> &x, TVecNum<double> &w);
+    void gauleg(const double x1, const double x2, VectorXd &x, VectorXd &w);
     
 };
 

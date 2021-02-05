@@ -18,7 +18,7 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "tmaterial1d.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "tpanic.h"
 
 TMaterial1d::TMaterial1d(int id, double K, double C, double B, double F) : TMaterial(id), fK(K), fC(C), fB(B), fF(F)
@@ -39,23 +39,23 @@ void TMaterial1d::Print(std::ostream& out) const
 }
 
 /**
- * Calcula o valor da contribuição da equação variacional no ponto dado
+ * Calcula o valor da contribuiï¿½ï¿½o da equaï¿½ï¿½o variacional no ponto dado
  * na matriz de rigidez do elemento e no vetor de carga
- * @param pt [in]: ponto de integração de Gauss
- * @param weight [in]: peso de integração
- * @param phiVal [in] : valor da função teste no ponto dado
- * @param dphi [in] : valor das derivadas da função de forma no ponto de integração
+ * @param pt [in]: ponto de integraï¿½ï¿½o de Gauss
+ * @param weight [in]: peso de integraï¿½ï¿½o
+ * @param phiVal [in] : valor da funï¿½ï¿½o teste no ponto dado
+ * @param dphi [in] : valor das derivadas da funï¿½ï¿½o de forma no ponto de integraï¿½ï¿½o
  * @param elementK [inout]: matriz de rigidez do elemento
  * @param elementF [inout]: vetor de carga do elemento
  */
 void TMaterial1d::Contribute (double  weight,
-                              TVec<double> & philVal,
-                              TMatrix & dphi,TMatrix & elementK,
-                              TMatrix & elementF) const
+                              VectorXd & philVal,
+                              MatrixXd & dphi,MatrixXd & elementK,
+                              MatrixXd & elementF) const
 {
     
-    for (int i=0; i<philVal.Size(); i++) {
-        for (int j=0; j<philVal.Size(); j++) {
+    for (int i=0; i<philVal.size(); i++) {
+        for (int j=0; j<philVal.size(); j++) {
             elementK(i,j)+=fK*dphi(0,i)*dphi(0,j)*weight+fB*philVal[i]*philVal[j]*weight+fC*philVal[i]*dphi(0,j)*weight;
         }
         elementF(i,0)+=weight*philVal[i]*fF;
@@ -74,11 +74,11 @@ void TMaterial1d::Contribute (double  weight,
  * @param l2 [in/out] contribuicao para norma em L2
  *
  */
-void TMaterial1d::ContributeErrorSquare(TVec<double> &x, double weight, double sol, TVec<double> &deriv,
-                                        void (function)(TVec<double>& x, double &val, TVec<double>&der), double &energy, double &l2)
+void TMaterial1d::ContributeErrorSquare(VectorXd &x, double weight, double sol, VectorXd &deriv,
+                                        void (function)(VectorXd& x, double &val, VectorXd&der), double &energy, double &l2)
 {
     double val;
-    TVec<double> deriuexact(1);
+    VectorXd deriuexact(1);
     function(x,val,deriuexact);
     l2+=weight*(val-sol)*(val-sol);
     energy+=weight*(deriuexact[0]-deriv[0])*(deriuexact[0]-deriv[0]);

@@ -1,5 +1,5 @@
-#ifndef TMATRIX_H
-#define TMATRIX_H
+#ifndef TMatrix_H
+#define TMatrix_H
 
 /*
  *  TMatrix.h

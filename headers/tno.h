@@ -22,31 +22,32 @@
 
 
 #include "TVec.h"
+#include "DataTypes.h"
 
 #include <fstream>
 #include <iostream>
 
 /**
-Implementa um nó
+Implementa um nï¿½
 @author Philippe R. B. Devloo
 */
 class TNo{
 public: // Construtores e destrutor
     /**
-     * Construtor vazio - todas as variáveis são inicializadas com
-     * valores nulos ou que indiquem falta de inicialização
+     * Construtor vazio - todas as variï¿½veis sï¿½o inicializadas com
+     * valores nulos ou que indiquem falta de inicializaï¿½ï¿½o
      */
     TNo();
     
     /**
-     * Construtor padrão - todos as variáveis são inicializadas 
+     * Construtor padrï¿½o - todos as variï¿½veis sï¿½o inicializadas 
      * com valores fornecidos
      */
-    TNo (TVec<double> &coordenadas);
+    TNo (VectorXd &coordenadas);
     
     /**
-     * Construtor de cópia - as variáveis são inicializadas com valores 
-     * do nó fornecido como parâmetro
+     * Construtor de cï¿½pia - as variï¿½veis sï¿½o inicializadas com valores 
+     * do nï¿½ fornecido como parï¿½metro
      */
     TNo (const TNo &copy); 
 
@@ -60,13 +61,13 @@ public: //Acesso a escrita dos objetos da classe
     /**
      * Define os valores dos dados da classe
      */
-    void setData(TVec<double> &coordenadas);
+    void setData(VectorXd &coordenadas);
     
 
     
 public: //Acesso a leitura dos objetos da classe
     /**
-     * Retorna a iésima coordenada
+     * Retorna a iï¿½sima coordenada
      */
     double &Co(int i);
        

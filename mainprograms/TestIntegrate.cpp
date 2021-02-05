@@ -2,13 +2,13 @@
 
 #include <iostream>
 #include <math.h>
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "TIntRule1d.h"
 #include "TIntRuleQuad.h"
 #include "TIntRuleTriangle.h"
 #include "TVec.h"
 #include "tpanic.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "tmalha.h"
 #include "telemento1d.h"
 #include "telemento0d.h"
@@ -39,7 +39,7 @@ double Poli2D(TVecNum<double> &coord, int orderx, int ordery);
 double Poli2DQuad(TVecNum<double> &coord, int orderx, int ordery);
 void UXi(TVecNum<double> &coord, TVecNum<double> &uXi, TVecNum<double> &gradu);
 TVecNum<double> X(TVecNum<double> &coordXi);
-void Jacobian(TVecNum<double> &Coord, TMatrix &jacobian, double &detjac);
+void Jacobian(TVecNum<double> &Coord, MatrixXd &jacobian, double &detjac);
 double InnerVec(TVecNum<double> &S , TVecNum<double> &T);
 
 int main ()
@@ -92,8 +92,8 @@ int main ()
     
     
     TMalha mesh;
-    CoordXi.Zero();
-    TMatrix jacobian, jacinv;
+    CoordXi.setZero();
+    MatrixXd jacobian, jacinv;
     double detjac;
 
     //Teste 3 - Regra de integração - Tabela de valores;
@@ -101,7 +101,7 @@ int main ()
     order =1;
     weight=0.;
     double valA=0;
-    CoordXi.Zero(),uXi.Zero(),gradu.Zero();
+    CoordXi.setZero(),uXi.setZero(),gradu.setZero();
     
     while(fabs(valA-80) >= 1.e-5) {
         TIntRuleQuad TestInt3(order);
@@ -109,10 +109,10 @@ int main ()
         TVecNum<double> coord;
       
         NPoint = TestInt3.NPoints();
-        TVec<int> nodes(NPoint);
+        VectorXi nodes(NPoint);
         
         TVec<TElemento *> &elvec = mesh.getElementVec();
-        elvec.Resize(1);
+        elvec.resize(1);
         
         for (int i=0; i<NPoint; i++) {
             nodes[i]=i;
@@ -135,15 +135,15 @@ int main ()
     order =19;
     weight=0.;
     double val3 = 0.;
-    CoordXi.Zero(),uXi.Zero(),gradu.Zero();
+    CoordXi.setZero(),uXi.setZero(),gradu.setZero();
 
  //   while(fabs(val3-239.49661609) >= 1.e-5) {
         TIntRuleQuad TestInt4(order);
         NPoint = TestInt4.NPoints();
-        TVec<int> nodes4(NPoint);
+        VectorXi nodes4(NPoint);
         
         TVec<TElemento *> &elvec4 = mesh.getElementVec();
-        elvec4.Resize(1);
+        elvec4.resize(1);
         
         for (int i=0; i<NPoint; i++) {
             nodes4[i]=i;
@@ -164,16 +164,16 @@ int main ()
     
     order =18;
     weight=0.;
-    CoordXi.Zero(),uXi.Zero(),gradu.Zero();
+    CoordXi.setZero(),uXi.setZero(),gradu.setZero();
 
     double val4 = 0.;
 
     while(fabs(val4-22.53695786) >= 1.e-5) {
         TIntRuleQuad TestInt5(order);
         NPoint = TestInt5.NPoints();
-        TVec<int> nodes5(NPoint);
+        VectorXi nodes5(NPoint);
         TVec<TElemento *> &elvec5 = mesh.getElementVec();
-        elvec5.Resize(1);
+        elvec5.resize(1);
         
         for (int i=0; i<NPoint; i++) {
             nodes5[i]=i;
@@ -376,11 +376,11 @@ TVecNum<double> X(TVecNum<double> &CoordXi)
     
 }
 
-void Jacobian(TVecNum<double> &Coord, TMatrix &jacobian, double &detjac)
+void Jacobian(TVecNum<double> &Coord, MatrixXd &jacobian, double &detjac)
 {
 
-    jacobian.Resize(2, 2);
-    jacobian.Zero();
+    jacobian.resize(2, 2);
+    jacobian.setZero();
     
     jacobian(0,0)=5.;
     jacobian(0,1)=1.5*cos(3.*Coord[1]);
@@ -399,24 +399,24 @@ void Jacobian(TVecNum<double> &Coord, TMatrix &jacobian, double &detjac)
  * @dphi valores das derivadas das funcoes de forma
  */
 
-void Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi, int order)
+void Shape(VectorXd &point, VectorXd &phi, MatrixXd &dphi, int order)
 {
     
     if (order==1) {
         
         int Indices[2][2]={{0,3},{1,2}};
         
-        TVec<double> coxi(1);
+        VectorXd coxi(1);
         coxi[0]=point[0];
         
-        TVec<double> coeta(1);
+        VectorXd coeta(1);
         coeta[0]=point[1];
         
-        TVec<double> phixi(2), phieta(2);
-        TMatrix dphixi(1,2),dphieta(1,2);
+        VectorXd phixi(2), phieta(2);
+        MatrixXd dphixi(1,2),dphieta(1,2);
         
-        phi.Resize(4);
-        dphi.Resize(2, 4);
+        phi.resize(4);
+        dphi.resize(2, 4);
         
         
         for (int xi=0; xi<order+1; xi++) {
@@ -442,17 +442,17 @@ void Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi, int order)
         
         int Indices[3][3]={{0,7,3},{4,8,6},{1,5,2}};
         
-        TVec<double> coxi(1);
+        VectorXd coxi(1);
         coxi[0]=point[0];
         
-        TVec<double> coeta(1);
+        VectorXd coeta(1);
         coeta[0]=point[1];
         
-        TVec<double> phixi(2), phieta(1);
-        TMatrix dphixi(1,3),dphieta(1,3);
+        VectorXd phixi(2), phieta(1);
+        MatrixXd dphixi(1,3),dphieta(1,3);
         
-        phi.Resize(9);
-        dphi.Resize(2, 9);
+        phi.resize(9);
+        dphi.resize(2, 9);
         
         
         for (int xi=0; xi<order+1; xi++) {
@@ -593,7 +593,7 @@ int TestPointFunctionFull()
   cout << "Teste1: Teste completo de pesos e coordenadas para uma ordem x." <<endl;
   TIntRule1d  Teste(6);
   TVecNum<double> weights(4,0);
-  TVec<double> valcoord(4.0);
+  VectorXd valcoord(4.0);
   
   valcoord[0] = -0.86113631159405257;  weights[0] = 0.34785484513745385;
   valcoord[1] = 0.86113631159405257;   weights[1] = 0.34785484513745385;

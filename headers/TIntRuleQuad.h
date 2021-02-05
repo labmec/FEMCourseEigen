@@ -10,17 +10,16 @@
 #define __FemSC__TIntRuleQuad__
 
 #include <stdio.h>
-#include "TVec.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 
 class TIntRuleQuad
 {
 
   int fOrder;
   
-  TMatrix fPoints;
+  MatrixXd fPoints;
   
-  TVec<double> fWeights;
+  VectorXd fWeights;
   
 
 public:
@@ -33,9 +32,9 @@ public:
     
     int NPoints();
     
-    void Point(int p, TVec <double> &co, double &weight);
+    void Point(int p, VectorXd &co, double &weight);
     
-    void gaulegQuad(const double x1, const double x2, TVecNum<double> &x, TVecNum<double> &w);
+    void gaulegQuad(const double x1, const double x2, VectorXd &x, VectorXd &w);
     
     void Print(std::ostream &out);
 };

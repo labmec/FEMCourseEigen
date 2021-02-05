@@ -17,7 +17,7 @@
 //
 #include <iostream>
 #include <math.h>
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "tmalha.h"
 #include "telemento1d.h"
 #include "telemento0d.h"
@@ -46,7 +46,7 @@ void CreateTestMesh(TMalha &mesh, int order);
 void CreateTestMeshTR(TMalha &mesh, int order);
 void TestOneDProblem(TMalha *mesh);
 
-void exact(TVec<double> &point,double &val, TVec<double> &deriv);
+void exact(VectorXd &point,double &val, VectorXd &deriv);
 
 int main ()
 {
@@ -74,7 +74,7 @@ int main ()
     return 0;
 }
 
-void exact(TVec<double> &point,double &val, TVec<double> &deriv){
+void exact(VectorXd &point,double &val, VectorXd &deriv){
     
     
     long double Pi=4*atan(1);
@@ -173,7 +173,7 @@ void CreateTestMesh(TMalha &mesh, int order)
 	elvec.Resize(nelem+nelem1D);
 	
 	
-	TVec<int> nodes((elorder+1)*(elorder+1)); //node index no interior do elemento;
+	VectorXi nodes((elorder+1)*(elorder+1)); //node index no interior do elemento;
 	
 	for (int ely=0; ely<nelemy; ely++) {
 		for (int elx = 0; elx<nelemx; elx++)
@@ -250,7 +250,7 @@ void CreateTestMesh(TMalha &mesh, int order)
     mesh.insertMaterial(mat);
     
 	
-	/*TMatrix stiff, rhs;
+	/*MatrixXd stiff, rhs;
      mesh.getElement(0)->CalcStiff(mesh,stiff,rhs);
      std::cout<<"matriz rigidez elemeto 0"<<std::endl;
      stiff.Print();
@@ -275,7 +275,7 @@ void CreateTestMesh(TMalha &mesh, int order)
     
 	
 	
-    TVec<int> nodesbc(elorder+1);
+    VectorXi nodesbc(elorder+1);
     
     for (int elbc=0; elbc<nelemx; elbc++) {
         
@@ -407,7 +407,7 @@ void CreateTestMeshTR(TMalha &mesh, int order)
 	elvec.Resize(nelem+nelem1D);
 	
 	
-	TVec<int> nodes(1); //node index no interior do elemento;
+	VectorXi nodes(1); //node index no interior do elemento;
 	
     int count1d=0;
     
@@ -496,7 +496,7 @@ void CreateTestMeshTR(TMalha &mesh, int order)
     mesh.insertMaterial(mat);
     
 	
-	/*TMatrix stiff, rhs;
+	/*MatrixXd stiff, rhs;
      mesh.getElement(0)->CalcStiff(mesh,stiff,rhs);
      std::cout<<"matriz rigidez elemeto 0"<<std::endl;
      stiff.Print();
@@ -521,7 +521,7 @@ void CreateTestMeshTR(TMalha &mesh, int order)
     
 	
 	
-    TVec<int> nodesbc(elorder+1);
+    VectorXi nodesbc(elorder+1);
     
     for (int elbc=0; elbc<nelemx; elbc++) {
         
@@ -592,7 +592,7 @@ int TestMesh(TMalha *mesh)
     cout<<"Teste1: Verifica os valores da funcao de forma sob o elemento mestre"<<endl;
     int count=0;
     TVecNum<double> point(1,0), phi;
-    TMatrix dphi;
+    MatrixXd dphi;
     int testres=0;
     for (int order=1; order < 5; order++) {
         
@@ -746,14 +746,14 @@ int TestMesh(TMalha *mesh)
     
     /**************************************************/
     cout<<"Teste3: Verifica os valores do Jacobiano" <<endl;
-    point.Zero();
+    point.setZero();
     count=0;
-    TMatrix jacobian, jacinv;
+    MatrixXd jacobian, jacinv;
     double detjac;
     int NElement;
     NElement = mesh->getElementVec().Size()-2;
     
-    TMatrix Cjacobian(1,1), Cjacinv(1,1);
+    MatrixXd Cjacobian(1,1), Cjacinv(1,1);
     double Cdetjac;
     
     Cjacobian(0,0) = (1/(double)NElement)/2;
@@ -787,13 +787,13 @@ int TestMesh(TMalha *mesh)
     int order = mesh->getElement(0)->getNodeVec().Size()-1;
     
     count=0;
-    point.Zero();
-    phi.Zero();
-    dphi.Zero();
-    TMatrix dphix(dphi);
+    point.setZero();
+    phi.setZero();
+    dphi.setZero();
+    MatrixXd dphix(dphi);
     
-    TMatrix localStiff(order+1,order+1), localRhs(order+1,1,0);
-    TMatrix ElementStiff1(order+order,order+order,0), ElementRhs1(order+order,1,0);
+    MatrixXd localStiff(order+1,order+1), localRhs(order+1,1,0);
+    MatrixXd ElementStiff1(order+order,order+order,0), ElementRhs1(order+order,1,0);
     
     TMaterial *mat = mesh->getMaterial(1);
     
@@ -809,7 +809,7 @@ int TestMesh(TMalha *mesh)
         mesh->getElement(0)->Shape1d(order, point, phi, dphi);
         
         dphix = dphi;
-        dphix.Zero();
+        dphix.setZero();
         
         for(int i=0; i<order+1; i++)
         {
@@ -825,10 +825,10 @@ int TestMesh(TMalha *mesh)
     
     ElementRhs1 = localRhs;
     ElementStiff1 = localStiff;
-    localStiff.Zero();
-    localRhs.Zero();
+    localStiff.setZero();
+    localRhs.setZero();
     
-    TMatrix ElementStiff2(order+order,order+order,0), ElementRhs2(order+order,1,0);
+    MatrixXd ElementStiff2(order+order,order+order,0), ElementRhs2(order+order,1,0);
     
     //Resultado verdadeiro dado pelo test
     for (int ip=0; ip<IntPoints; ip++) {
@@ -867,8 +867,8 @@ int TestMesh(TMalha *mesh)
     ElementRhs2 = localRhs;
     ElementStiff2 = localStiff;
     
-    TMatrix Error(ElementStiff1);
-    Error.Zero();
+    MatrixXd Error(ElementStiff1);
+    Error.setZero();
     
     Error = ElementStiff2 - ElementStiff1;
     // ElementStiff2.Print();
@@ -899,15 +899,15 @@ int TestMesh(TMalha *mesh)
     
     int neq = mesh->getNodeVec().Size();
     
-    TMatrix TestStiff(neq,neq,0.0);
-    TMatrix TestRhs(neq,1);
+    MatrixXd TestStiff(neq,neq,0.0);
+    MatrixXd TestRhs(neq,1);
     
-    TMatrix ProgStiff(neq,neq,0.0);
-    TMatrix ProgRhs(neq,1);
+    MatrixXd ProgStiff(neq,neq,0.0);
+    MatrixXd ProgRhs(neq,1);
     
     for (int iE=0; iE<NElement; iE++) {
         
-        TVec<int> nodes ;
+        VectorXi nodes ;
         
         nodes = mesh->getElement(iE)->getNodeVec();
         
@@ -937,10 +937,10 @@ int TestMesh(TMalha *mesh)
     
     
     
-    TMatrix StiffError(TestStiff);
-    StiffError.Zero();
-    TMatrix RhsError(TestRhs);
-    RhsError.Zero();
+    MatrixXd StiffError(TestStiff);
+    StiffError.setZero();
+    MatrixXd RhsError(TestRhs);
+    RhsError.setZero();
     
     StiffError = TestStiff-ProgStiff;
     //StiffError.Print();

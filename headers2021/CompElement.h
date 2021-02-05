@@ -104,7 +104,7 @@ public:
     
     // Compute the solution and its gradient at a parametric point
     // for dsol the row indicates the direction, the column indicates the state variable
-    virtual void Solution(const VecDouble &intpoint, VecDouble &sol, TMatrix &dsol) const;
+    virtual void Solution(const VecDouble &intpoint, VecDouble &sol, MatrixXd &dsol) const;
     
     /// Compute the error of the finite element approximation
     double ComputeError(std::function<void(const VecDouble &co, VecDouble &sol, Matrix &dsol)> &exact,  VecDouble &errors);

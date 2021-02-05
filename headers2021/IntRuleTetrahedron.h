@@ -11,7 +11,7 @@
 
 #include <stdio.h>
 #include "TVec.h"
-#include "TMatrix.h"
+#include <Eigen/Dense>
 #include "IntRule.h"
 
 class IntRuleTetrahedron : public IntRule

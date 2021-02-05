@@ -33,13 +33,13 @@ class TElemento0d : public TElemento
 public:
     TElemento0d();
     
-    TElemento0d(int matid, int order, TVec< int >& nodes);
+    TElemento0d(int matid, int order, VectorXi & nodes);
 
     ~TElemento0d();
 
     static std::string TypeName(MElementType type);
-    virtual void CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs);
-    virtual void Jacobian(TVec< double > &point, TMatrix& jacobian, TMatrix& jacinv, double &detjac, TMalha& malha);
+    virtual void CalcStiff(TMalha &malha, MatrixXd &stiff, MatrixXd &rhs);
+    virtual void Jacobian(VectorXd &point, MatrixXd & jacobian, MatrixXd& jacinv, double &detjac, TMalha& malha);
     
     // retorno o tipo de elemento
     MElementType getElType();
@@ -50,14 +50,14 @@ public:
      * @phi valores das funcoes de forma
      * @dphi valores das derivadas das funcoes de forma
      */
-    virtual void Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi);
+    virtual void Shape(VectorXd &point, VectorXd &phi, MatrixXd &dphi);
     /**
      * Calcula o erro do elemento
      * @param exact funcao que calcula o valor exato
      * @param energy [out] erro na norma de energia
      * @param l2 [out] erro na norma l2
      */
-virtual void Error(TMatrix &solution, TMalha &malha, void (*f)(TVec<double> &,double &, TVec<double> &), double &energy, double &l2)
+virtual void Error(MatrixXd &solution, TMalha &malha, void (*f)(VectorXd &,double &, VectorXd &), double &energy, double &l2)
      {
      	energy = 0.;
 	l2 = 0.;
@@ -70,7 +70,7 @@ virtual void Error(TMatrix &solution, TMalha &malha, void (*f)(TVec<double> &,do
      * @param uhe combinacao linear de alpha_{i} phi_{i}
      * @param duhedx combinacao linear de alpha_{i} dphi_{i}
      */
-    virtual void uhe(TMatrix &solution, TMalha &malha, TMatrix &uhe, TMatrix &duhedx);
+    virtual void uhe(MatrixXd &solution, TMalha &malha, MatrixXd &uhe, MatrixXd &duhedx);
 
 
 };

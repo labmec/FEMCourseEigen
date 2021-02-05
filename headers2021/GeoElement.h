@@ -80,7 +80,7 @@ public:
     virtual void SetNeighbour(int side, const GeoElementSide &neigh) = 0;
     
     // Return the enumerated element type
-    virtual ElementType Type() = 0;
+    virtual MElementType Type() = 0;
 
     //Set reference
     virtual void SetReference(CompElement * elp){

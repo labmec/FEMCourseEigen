@@ -18,10 +18,11 @@
  *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
  ***************************************************************************/
 #include "tanalysis.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include <math.h>
 #include "TVec.h"
 #include "tpanic.h"
+#include <Eigen/LU>
 
 TAnalysis::TAnalysis(TMalha *malha) : fMalha(malha), fSolution()
 {
@@ -38,57 +39,58 @@ void TAnalysis::Run()
 {
     TMalha *malha=this->fMalha;
     TVec<TNo> nos=malha->getNodeVec();
-    double nnodes=nos.Size();
-    TMatrix K(nnodes,nnodes);
-    K.Zero();
-    TMatrix F(nnodes,1);
-    F.Zero();
+    int nnodes = nos.Size();
+    MatrixXd K(nnodes,nnodes);
+    K.setZero();
+    MatrixXd F(nnodes,1);
+    F.setZero();
     
     Assemble(K, F);
     
-    K.Print();
-    F.Print();
-    
-    K.Solve_LU(F);
-    fSolution=F;
-    fSolution.Print();
+    std::cout << K << std::endl;
+    std::cout << F << std::endl;
+
+    FullPivLU<MatrixXd> Klu(K);
+    fSolution = Klu.matrixLU()*F;
+
+    std::cout << fSolution << std::endl;
 }
 
 
 // assembly method
 
-void TAnalysis::Assemble(TMatrix &stiff, TMatrix &rhs)
+void TAnalysis::Assemble(MatrixXd &stiff, MatrixXd &rhs)
 {
     //Inicializar as matrizes
     
     TMalha *malha=this->fMalha;
-    double nel=malha->getElementVec().Size();
-    double nnodes=malha->getNodeVec().Size();
+    auto nel=malha->getElementVec().Size();
+    auto nnodes=malha->getNodeVec().Size();
     
-    stiff.Resize(nnodes, nnodes);
-    rhs.Resize(nnodes, 1);
-    stiff.Zero();
-    rhs.Zero();
+    stiff.resize(nnodes, nnodes);
+    rhs.resize(nnodes, 1);
+    stiff.setZero();
+    rhs.setZero();
     
     for (int el=0; el<nel; el++) {
         
         
         TMalha *malha=this->fMalha;
         TElemento *cel=malha->getElement(el);
-        TVec<int> nos=cel->getNodeVec();
+        VectorXi nos=cel->getNodeVec();
         
-        TMatrix EK(nos.Size(),nos.Size()),EF(nos.Size(),1);
+        MatrixXd EK(nos.size(),nos.size()),EF(nos.size(),1);
         
-        EF.Zero();
-        EK.Zero();
+        EF.setZero();
+        EK.setZero();
         
         cel->CalcStiff(*malha, EK, EF);
         
         //EK.Print();
         
-        for (int i=0; i<nos.Size(); i++) {
+        for (int i=0; i<nos.size(); i++) {
             rhs(nos[i],0)+=EF(i,0);
-            for (int j=0; j<nos.Size(); j++) {
+            for (int j=0; j<nos.size(); j++) {
                 stiff(nos[i],nos[j])+=EK(i,j);
             }
         }
@@ -104,7 +106,7 @@ void TAnalysis::Assemble(TMatrix &stiff, TMatrix &rhs)
 // computes the error in energy and l2 norm
 
 
-void TAnalysis::Error(void (*exact) (TVec<double> &x, double &val, TVec<double> &deriv), double &energy, double &l2)
+void TAnalysis::Error(void (*exact) (VectorXd &x, double &val, VectorXd &deriv), double &energy, double &l2)
 {
     
     TMalha *malha=this->fMalha;
@@ -139,8 +141,8 @@ void TAnalysis::uh(std::string &file_name){
     TMalha *malha=this->fMalha;
     double nel=malha->getElementVec().Size();
     int np = 3;
-    TMatrix uh;
-    TMatrix duhdx;
+    MatrixXd uh;
+    MatrixXd duhdx;
     for (int el=0; el<nel; el++) {
         
         TElemento *cel=malha->getElement(el);

@@ -24,13 +24,13 @@
 #include "tno.h"
 #include "tmalha.h"
 #include "tmaterial.h"
-#include "TMatrix.h"
+#include "DataTypes.h"
 #include "TIntRule1d.h"
 #include "tpanic.h"
 #include <math.h>
 //#include "pzquad.h"
 
-TElemento1d::TElemento1d(int matid, int order, TVec< int > &nodes): TElemento(matid, order, nodes)
+TElemento1d::TElemento1d(int matid, int order, VectorXi &nodes): TElemento(matid, order, nodes)
 {
 }
 
@@ -47,10 +47,10 @@ TElemento1d::~TElemento1d()
 
 MElementType TElemento1d::getElType()
 {
-    return ELinear;
+    return EOned;
 }
 
-void TElemento1d::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
+void TElemento1d::CalcStiff(TMalha &malha, MatrixXd &stiff, MatrixXd &rhs)
 {
     
     
@@ -61,32 +61,32 @@ void TElemento1d::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
     
     //inicializar as matrizes
     
-    stiff.Resize(fPorder+1, fPorder+1);
-    rhs.Resize(fPorder+1, 1);
+    stiff.resize(fPorder+1, fPorder+1);
+    rhs.resize(fPorder+1, 1);
     
     //Criar regra de integracao
     
     TIntRule1d iRule1d(fPorder+fPorder);
     int np=iRule1d.NPoints();
     
-    TMatrix dphi(1,fPorder+1);
-    TVec<double> phi(fPorder+1);
+    MatrixXd dphi(1,fPorder+1);
+    VectorXd phi(fPorder+1);
     
     
     for (int i=0; i<np; i++) {
         double weight=0.0;
-        TVec<double> co(1);
+        VectorXd co(1);
         iRule1d.Point(i,co,weight);
         Shape(co,phi,dphi);
         
-        TMatrix jacobian(1,1);
-        TMatrix jacinv(1,1);
+        MatrixXd jacobian(1,1);
+        MatrixXd jacinv(1,1);
         double detjac=0.0;
         
         Jacobian(co,jacobian,jacinv,detjac,malha);
         
         weight=weight*fabs(detjac);
-        for (int i = 0; i<phi.Size(); i++) {
+        for (int i = 0; i<phi.size(); i++) {
             //phi[i]=phi[i]*detjac;
             
             dphi(0,i)=dphi(0,i)*jacinv(0,0);
@@ -110,34 +110,33 @@ void TElemento1d::CalcStiff(TMalha &malha, TMatrix &stiff, TMatrix &rhs)
  * @malha : objeto malha necessaria para relacionar os indices dos nos com os nos reais
  */
 
-void TElemento1d::Jacobian(TVec<double> &point, TMatrix &jacobian, TMatrix &jacinv, double &detjac, TMalha &malha)
+void TElemento1d::Jacobian(VectorXd &point, MatrixXd &jacobian, MatrixXd &jacinv, double &detjac, TMalha &malha)
 {
-  
-	TVec<TNo> nos(fNodes.Size());
+	TVec<TNo> nos(fNodes.size());
 	for (int ino = 0; ino<nos.Size(); ino++) {
 		nos[ino] = malha.getNode(fNodes[ino]);
 	}
 
 
-	TMatrix Coord(2, fNodes.Size());
+	MatrixXd Coord(2, fNodes.size());
 
-	for (int i = 0; i<fNodes.Size(); i++) {
+	for (int i = 0; i<fNodes.size(); i++) {
 		Coord(0, i) = nos[i].Co(0);
 		Coord(1, i) = nos[i].Co(1);
 	}
 
-	TVec<double> phixi(fNodes.Size());
-	TMatrix dphixi(1, fNodes.Size());
+	VectorXd phixi(fNodes.size());
+	MatrixXd dphixi(1, fNodes.size());
 
-	jacobian.Resize(1, 1);
-	jacobian.Zero();
+	jacobian.resize(1, 1);
+	jacobian.setZero();
 
-	jacinv.Resize(1, 1);
-	jacinv.Zero();
+	jacinv.resize(1, 1);
+	jacinv.setZero();
 
 	this->Shape(point, phixi, dphixi);
 	double dxdxi = 0., dydxi = 0.;
-	for (int xi = 0; xi<fNodes.Size(); xi++) {
+	for (int xi = 0; xi<fNodes.size(); xi++) {
 		dxdxi += Coord(0, xi)*dphixi(0, xi);
 		dydxi += Coord(1, xi)*dphixi(0, xi);
 
@@ -145,7 +144,7 @@ void TElemento1d::Jacobian(TVec<double> &point, TMatrix &jacobian, TMatrix &jaci
 
 	jacobian(0, 0) = sqrt(dxdxi*dxdxi + dydxi*dydxi)/2.;
 
-	jacobian.Resize(1, 1);
+	jacobian.resize(1, 1);
 
 	jacinv(0, 0) = 1./jacobian(0,0);
 
@@ -186,7 +185,7 @@ void TElemento1d::Jacobian(TVec<double> &point, TMatrix &jacobian, TMatrix &jaci
  * @dphi valores das derivadas das funcoes de forma */
 
 
-void TElemento1d::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi)
+void TElemento1d::Shape(VectorXd &point, VectorXd &phi, MatrixXd &dphi)
 {
     
     for (int i=0; i<fPorder+1; i++) {
@@ -199,7 +198,7 @@ void TElemento1d::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi)
         
         for (int j=0; j<fPorder+1; j++) {
             
-            TMatrix axdphi(1,fPorder+1);
+            MatrixXd axdphi(1,fPorder+1);
             if (i!=j) {
                 double epsj=-1.+j*2./fPorder;
             
@@ -232,7 +231,7 @@ void TElemento1d::Shape(TVec<double> &point, TVec<double> &phi, TMatrix &dphi)
  * @param energy [out] erro na norma de energia
  * @param l2 [out] erro na norma l2
  */
-void TElemento1d::Error(TMatrix &solution, TMalha &malha, void (exact)(TVec<double> &,double &, TVec<double> &), double &energy, double &l2)
+void TElemento1d::Error(MatrixXd &solution, TMalha &malha, void (exact)(VectorXd &,double &, VectorXd &), double &energy, double &l2)
 {
 
     int matId =this->fMaterialId;
@@ -241,10 +240,10 @@ void TElemento1d::Error(TMatrix &solution, TMalha &malha, void (exact)(TVec<doub
     //calcluar as coordenadas , limites dos elementos
     TNo n01=malha.getNode(fNodes[0]);
     TNo n02=malha.getNode(fNodes[fPorder]);
-    int nnodes=fNodes.Size();
+    int nnodes=fNodes.size();
     
-    TVecNum<double> xA(1);
-    TVecNum<double> xB(1);
+    VectorXd xA(1);
+    VectorXd xB(1);
     
     xA[0]=n01.Co(0);
     xB[0]=n02.Co(0);
@@ -259,30 +258,30 @@ void TElemento1d::Error(TMatrix &solution, TMalha &malha, void (exact)(TVec<doub
     for (int ip=0; ip<np; ip++) {
         //calcualndo o psi-ponto de integracao
         double weight=0.0;
-        TVec<double> co(1);
+        VectorXd co(1);
         
         iRule1d.Point(ip, co, weight);
         //calculando o vetor point das cordenadas em funcao de psi (volta)
         
-        TVec<double> xPoint(1);
+        VectorXd xPoint(1);
         xPoint[0]=xA[0]+(xB[0]-xA[0])*(co[0]+1.0)/2.0;
         
         //calculo do jacobiano
         
-        TMatrix jacobian(1,1);
-        TMatrix jacinv(1,1);
+        MatrixXd jacobian(1,1);
+        MatrixXd jacinv(1,1);
         double detjac=0.0;
         
         Jacobian(co,jacobian,jacinv,detjac,malha);
         
         //calculo das funcoes de forma
         
-        TMatrix dphi(1,fPorder+1);
-        TVec<double> phi(fPorder+1);
+        MatrixXd dphi(1,fPorder+1);
+        VectorXd phi(fPorder+1);
         Shape(co,phi,dphi);
         
         weight=weight*fabs(detjac);
-        for (int i = 0; i<phi.Size(); i++) {
+        for (int i = 0; i<phi.size(); i++) {
             
             dphi(0,i)=dphi(0,i)*jacinv(0,0);
         }
@@ -290,7 +289,7 @@ void TElemento1d::Error(TMatrix &solution, TMalha &malha, void (exact)(TVec<doub
         //calculo dos vetor de solucao e alphas
         
         double uh=0.;
-        TVec<double> duh(1);
+        VectorXd duh(1);
         duh[0]=0.;
         
         for (int i=0; i<nnodes; i++) {
@@ -308,7 +307,7 @@ void TElemento1d::Error(TMatrix &solution, TMalha &malha, void (exact)(TVec<doub
     
 }
 
-void TElemento1d::uhe(TMatrix &solution, TMalha &malha, TMatrix &uhe, TMatrix &duhedx){
+void TElemento1d::uhe(MatrixXd &solution, TMalha &malha, MatrixXd &uhe, MatrixXd &duhedx){
     
     int matId =this->fMaterialId;
     TMaterial *mat=malha.getMaterial(matId);
@@ -316,10 +315,10 @@ void TElemento1d::uhe(TMatrix &solution, TMalha &malha, TMatrix &uhe, TMatrix &d
     //calcluar as coordenadas , limites dos elementos
     TNo n01=malha.getNode(fNodes[0]);
     TNo n02=malha.getNode(fNodes[fPorder]);
-    int nnodes=fNodes.Size();
+    int nnodes=fNodes.size();
     
-    TVecNum<double> xA(1);
-    TVecNum<double> xB(1);
+    VectorXd xA(1);
+    VectorXd xB(1);
     
     xA[0]=n01.Co(0);
     xB[0]=n02.Co(0);
@@ -330,40 +329,40 @@ void TElemento1d::uhe(TMatrix &solution, TMalha &malha, TMatrix &uhe, TMatrix &d
 //    int np=iRule1d.NPoints();
 
     int np = 3;
-    uhe.Resize(np,2);
-    duhedx.Resize(np, 2);
-    uhe.Zero();
-    duhedx.Zero();
+    uhe.resize(np,2);
+    duhedx.resize(np, 2);
+    uhe.setZero();
+    duhedx.setZero();
     
     
-    TVec<double> xi(3);
+    VectorXd xi(3);
     
     xi[0]=-1.0;
     xi[1]= 0.0;
     xi[2]= 1.0;
     
     for (int ip=0; ip<np; ip++) {
-        TVec<double> par(1);
+        VectorXd par(1);
         par[0]=xi[ip];
         
-        TVec<double> xPoint(1);
+        VectorXd xPoint(1);
         xPoint[0]=xA[0]+(xB[0]-xA[0])*(par[0]+1)/2;
         
         //calculo do jacobiano
         
-        TMatrix jacobian(1,1);
-        TMatrix jacinv(1,1);
+        MatrixXd jacobian(1,1);
+        MatrixXd jacinv(1,1);
         double detjac=0.0;
         
         Jacobian(par,jacobian,jacinv,detjac,malha);
         
         //calculo das funcoes de forma
         
-        TMatrix dphi(1,fPorder+1);
-        TVec<double> phi(fPorder+1);
+        MatrixXd dphi(1,fPorder+1);
+        VectorXd phi(fPorder+1);
         Shape(par,phi,dphi);
         
-        for (int i = 0; i<phi.Size(); i++) {
+        for (int i = 0; i<phi.size(); i++) {
             
             dphi(0,i)=dphi(0,i)*jacinv(0,0); // transforma a derivada no espaco parametrico para o dominio xyz. 
         }

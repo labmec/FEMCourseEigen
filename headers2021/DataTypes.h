@@ -14,14 +14,16 @@
 #include <vector>
 #include <functional>
 //#include "TVecNum.h"
-#include "TMatrix.h"
+#include <Eigen/Dense>
 
 
-typedef TMatrix Matrix;
-typedef std::vector<int> VecInt;
-typedef std::vector<double> VecDouble;
+// typedef MatrixXd Matrix;
+// typedef VectorXi VecInt;
+// typedef VectorXd VecDouble;
 
-enum ElementType
+using namespace Eigen;
+
+enum MElementType
 {
     /*0*/    EPoint,
     /*1*/    EOned,
