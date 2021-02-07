@@ -40,6 +40,12 @@ if(WIN32)
 	set(CMAKE_CXX_FLAGS_RELEASE "${CMAKE_CXX_FLAGS_RELEASE} /W0")
 endif()
 
+option(USING_BOOST "Whether the Boost package will be linked with the library" OFF)
+if(USING_BOOST)
+	FIND_PACKAGE( Boost 1.71 COMPONENTS program_options REQUIRED )
+	INCLUDE_DIRECTORIES( ${Boost_INCLUDE_DIR} )
+endif(USING_BOOST)
+
 option(USING_FAD "Whether the FAD package will be linked with the library" OFF)
 
 if(USING_FAD)
