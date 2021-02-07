@@ -12,11 +12,14 @@
 #include "DataTypes.h"
 
 class CompElement;
+
 class GeoMesh;
 
 class MathStatement;
 
 class GeoMesh;
+
+class DOF;
 
 class CompMesh
 {
@@ -33,7 +36,7 @@ class CompMesh
     std::vector<MathStatement *> mathstatements;
     
     // Vector with solution coeficients
-    std::vector<double> solution;
+    VecDouble solution;
     
     /** @brief Default order for all elements of this mesh */
     int64_t DefaultOrder = 0;
@@ -64,6 +67,10 @@ public:
     
     // Set the number of math statements
     void SetNumberMath(int nmath);
+    
+    int64_t GetNumberDOF() const {
+        return dofs.size();
+    }
     
     // Set the computational element associated to an index
     void SetElement(int64_t elindex, CompElement *cel);
@@ -122,9 +129,12 @@ public:
     // Initialize the datastructure FirstEquation of the DOF objects in the order specified by the vector
     void Resequence(VecInt &DOFindices);
     
-    std::vector<double> &Solution();
+    VecDouble &Solution();
     
-    void LoadSolution(std::vector<double> &Sol);
+    void LoadSolution(VecDouble &Sol);
+    
+    // Method to print computational mesh
+    virtual void Print(std::ostream & out = std::cout);
     
 };
 

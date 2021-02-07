@@ -21,38 +21,42 @@ public:
     
     VecDouble phi;
     
-    Matrix dphidksi;
+    MatrixDouble dphidksi;
     
     VecDouble x;
     
-    Matrix gradx;
+    MatrixDouble gradx;
     
-    Matrix axes;
+    MatrixDouble axes;
     
     double detjac;
     
-    Matrix dphidx;
+    MatrixDouble dphidx;
     
     VecDouble solution;
     
-    Matrix dsoldksi;
+    MatrixDouble dsoldksi;
     
-    Matrix dsoldx;
+    MatrixDouble dsoldx;
     
-    void ComputeSolution(VecDouble &coefs)
+    VecDouble coefs;
+    
+    void ComputeSolution()
     {
+        
         if(coefs.size()%phi.size())
         {
-            DebugStop();
+        //    DebugStop();
         }
         int nstate = coefs.size()/phi.size();
         solution.resize(nstate);
-        for(auto &solval:solution) solval = 0.;
-        dsoldksi.resize(dphidx.Rows(), nstate);
-        dsoldx.resize(dphidx.Rows(), nstate);
+        solution.setZero();
+        dsoldksi.resize(dphidx.rows(), nstate);
+        dsoldx.resize(dphidx.rows(), nstate);
         dsoldx.setZero();
         dsoldksi.setZero();
-        int dim = dphidx.Rows();
+         
+        int dim = dphidx.rows();
         for (int iphi=0; iphi<phi.size(); iphi++) {
             double phival = phi[iphi];
             for (int istate=0; istate<nstate; istate++) {

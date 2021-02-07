@@ -8,24 +8,28 @@
 #ifndef Analysis_h
 #define Analysis_h
 
-#include <Eigen/Dense>
-#include "DataTypes.h"
-class CompMesh;
-class PostProcess;
-#include <string>
 
+#include "DataTypes.h"
+#include <string>
+#include <iostream>
+
+//#include <armadillo>
+//using namespace arma;
+
+class CompMesh;
+
+class PostProcess;
 
 class Analysis
 {
 protected:
-    
     CompMesh *cmesh;
     
-    MatrixXd Solution;
+    MatrixDouble Solution;
     
-    MatrixXd GlobalSystem;
+    MatrixDouble GlobalSystem;
     
-    MatrixXd RightHandSide;
+    MatrixDouble RightHandSide;
     
 public:
     
@@ -35,6 +39,8 @@ public:
     
     Analysis &operator=(const Analysis &cp);
     
+    ~Analysis();
+    
     Analysis(CompMesh *cmesh);
     
     void SetMesh(CompMesh *cmesh);
@@ -43,7 +49,9 @@ public:
     
     void RunSimulation();
     
-    void PostProcess(std::string &filename, PostProcess &defPostProc) const;
+    void PostProcessSolution(const std::string &filename, PostProcess &defPostProc) const;
+    
+    VecDouble PostProcessError(std::ostream &out, PostProcess &defPostProc) const;
     
 };
 

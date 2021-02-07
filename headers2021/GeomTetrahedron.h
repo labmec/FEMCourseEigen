@@ -29,13 +29,13 @@ public:
     GeomTetrahedron &operator=(const GeomTetrahedron &copy);
     
     // Computes the shape functions associated with the geometric map
-    void Shape(const VecDouble &xi, VecDouble &phi, Matrix &dphi);
+    void Shape(const VecDouble &xi, VecDouble &phi, MatrixDouble &dphi);
     
     // Computes the value of x for a given point in parameter space as a function of corner coordinates
-    void X(const VecDouble &xi, Matrix &NodeCo, VecDouble &x);
+    void X(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble &x);
     
     // Computes the value of x and gradx for a given point in parameter space
-    void GradX(const VecDouble &xi, Matrix &NodeCo, VecDouble &x, Matrix &gradx);
+    void GradX(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble &x, MatrixDouble &gradx);
     
     // Return the number of nodes of the template
     int NumNodes();

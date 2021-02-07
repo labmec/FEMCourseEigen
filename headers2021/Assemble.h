@@ -9,8 +9,10 @@
 #define Assemble_h
 
 #include "DataTypes.h"
-#include "CompMesh.h"
 #include "PostProcess.h"
+#include <iostream>\
+
+class CompMesh;
 
 // class geared towards the assembly of the global system of equations
 class Assemble
@@ -36,8 +38,7 @@ public:
     void OptimizeBandwidth();
     
     /// Compute the global stiffness matrix and right hand side
-    void Compute(Matrix &globmat, Matrix &rhs);
-    
+    void Compute(MatrixDouble &globmat, MatrixDouble &rhs);
+
 };
 #endif /* Assemble_h */
-

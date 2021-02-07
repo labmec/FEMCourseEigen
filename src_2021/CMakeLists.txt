@@ -1,6 +1,5 @@
 # @file FemSC/headers/CMakeLists.txt  -- CMake file for the Headers module
 
-file(GLOB headers *.h)
+file(GLOB sources *.cpp)
 
-set(FemSC_HEAD ${headers} PARENT_SCOPE)
-
+set(SOURCES2021 ${sources} PARENT_SCOPE)

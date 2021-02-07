@@ -1,44 +1,35 @@
-//
-//  TIntRule1d.cpp
-//  FemSC
-//
-//  Created by Philippe Devloo on 7/30/15.
-//
-//
-//Integral cpp
-#include "TIntRuleTriangle.h"
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+
+#include <iostream> 
+#include "IntRuleTriangle.h"
 #include "tpanic.h"
 
+IntRuleTriangle::IntRuleTriangle(){
 
-TIntRuleTriangle::TIntRuleTriangle(int order)
-{
-    SetOrder(order);
 }
 
-void TIntRuleTriangle::SetOrder(int order)
-{
-    if (order<0||order>19) {
+IntRuleTriangle::IntRuleTriangle(int order) {
+    if (order < 0|| order > 19) {
         DebugStop();
     }
     
-    fOrder=order;
+    SetOrder(order);
 }
 
-
-int TIntRuleTriangle::NPoints()
-{
+void IntRuleTriangle::SetOrder(int order) {
+    fOrder = order;
     
-    if (fOrder == 0) {
-        
+        if (fOrder == 0) {        
         fPoints.resize(1, 2);
         fWeights.resize(1);
         
         fPoints(0,0) = 0.33333333333333331;  fPoints(0,1) = 0.33333333333333331;  fWeights[0] = 0.5;
-    }
-    
-    
-    if(fOrder==1||fOrder==2){
-        
+    } 
+    if(fOrder==1||fOrder==2){        
         fPoints.resize(3, 2);
         fWeights.resize(3);
         
@@ -46,12 +37,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(1,0) = 0.66666666666666663;  fPoints(1,1) = 0.16666666666666666;  fWeights[1] = 0.16666666666666666;
         fPoints(2,0) = 0.16666666666666666;  fPoints(2,1) = 0.16666666666666666;  fWeights[2] = 0.16666666666666666;
     }
-    
-    
-    
-    
-    if(fOrder==3){
-        
+    if (fOrder == 3) {
         fPoints.resize(6, 2);
         fWeights.resize(6);
         
@@ -62,9 +48,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(4,0) = 0.044160232864872598;  fPoints(4,1) = 0.47791988356756371;   fWeights[4] = 0.026091765446176841;
         fPoints(5,0) = 0.47791988356756371;  fPoints(5,1) = 0.47791988356756371;    fWeights[5] = 0.026091765446176841;
     }
-    
-    if(fOrder==4){
-        
+    if (fOrder == 4) {
         fPoints.resize(6, 2);
         fWeights.resize(6);
         
@@ -74,11 +58,8 @@ int TIntRuleTriangle::NPoints()
         fPoints(3,0) = 0.091576213509770743;  fPoints(3,1) =  0.81684757298045851;      fWeights[3] =  0.054975871827660935;
         fPoints(4,0) = 0.81684757298045851;  fPoints(4,1) =  0.091576213509770743;      fWeights[4] =  0.054975871827660935;
         fPoints(5,0) = 0.091576213509770743;  fPoints(5,1) =  0.091576213509770743;      fWeights[5] =  0.054975871827660935;
-    
     }
-    
-    if (fOrder==5) {
-        
+    if (fOrder == 5) {
         fPoints.resize(7, 2);
         fWeights.resize(7);
         
@@ -90,9 +71,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(5,0) = 0.47014206410511511;  fPoints(5,1) = 0.47014206410511511;       fWeights[5] = 0.066197076394253096;
         fPoints(6,0) = 0.33333333333333331;  fPoints(6,1) = 0.33333333333333331;       fWeights[6] = 0.1125;
     }
-    
-    if (fOrder==6) {
-        
+    if (fOrder == 6) {        
         fPoints.resize(12, 2);
         fWeights.resize(12);
         
@@ -109,10 +88,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(10,0) = 0.053145049844816945;   fPoints(10,1) = 0.31035245103378439;        fWeights[10] = 0.041425537809186785;
         fPoints(11,0) = 0.31035245103378439;    fPoints(11,1) = 0.053145049844816945;       fWeights[11] = 0.041425537809186785;
     }
-    
-    
-    if (fOrder==7) {
-        
+    if (fOrder == 7) {        
         fPoints.resize(15, 2);
         fWeights.resize(15);
         
@@ -136,10 +112,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(13,0) = 0.76122274802452383;   fPoints(13,1) = 0.04627087779880891;        fWeights[13] = 0.028060072141687677;
         fPoints(14,0) = 0.04627087779880891;    fPoints(14,1) = 0.76122274802452383;       fWeights[14] = 0.028060072141687677;
     }
-    
-    
-    if (fOrder==8) {
-        
+    if (fOrder == 8) {        
         fPoints.resize(16, 2);
         fWeights.resize(16);
         
@@ -160,9 +133,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(14,0)= 0.26311282963463811;     fPoints(14,1)= 0.0083947774099576052;  fWeights[14]= 0.013615157087217496;
         fPoints(15,0)= 0.0083947774099576052;   fPoints(15,1)= 0.26311282963463811;    fWeights[15]= 0.013615157087217496;
     }
-    
-    if (fOrder==9) {
-        
+    if (fOrder == 9) {        
         fPoints.resize(19, 2);
         fWeights.resize(19);
         
@@ -186,10 +157,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(17,0)= 0.74119859878449801;        fPoints(17,1)= 0.22196298916076571;     fWeights[17]= 0.021641769688644688;
         fPoints(18,0)= 0.22196298916076571;        fPoints(18,1)= 0.74119859878449801;     fWeights[18]= 0.021641769688644688;
     }
-    
-    
-    if (fOrder==10) {
-        
+    if (fOrder == 10) {        
         fPoints.resize(25, 2);
         fWeights.resize(25);
         
@@ -219,10 +187,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(23,0)= 0.12280457706855927; 	fPoints(23,1)= 0.033371833739304788;    fWeights[23]= 0.013474676295939981;
         fPoints(24,0)= 0.033371833739304788;   fPoints(24,1)= 0.12280457706855927;      fWeights[24]= 0.013474676295939981;
     }
-    
-    
-    if (fOrder==11) {
-        
+    if (fOrder == 11) {        
         fPoints.resize(28, 2);
         fWeights.resize(28);
         
@@ -255,10 +220,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(26,0)= 0.64047231013486527;    fPoints(26,1)= 0.31178371570959901;      fWeights[26]= 0.02036399822914952;
         fPoints(27,0)= 0.31178371570959901; 	fPoints(27,1)= 0.64047231013486527;      fWeights[27]= 0.02036399822914952;
     }
-    
-    
-    if (fOrder==12) {
-        
+    if (fOrder == 12) {        
         fPoints.resize(33, 2);
         fWeights.resize(33);
         
@@ -296,10 +258,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(31,0)= 0.60894323577978782;    fPoints(31,1)= 0.27571326968551418;      fWeights[31]= 0.020185778883190463;
         fPoints(32,0)= 0.27571326968551418;    fPoints(32,1)= 0.60894323577978782;      fWeights[32]= 0.020185778883190463;
     }
-    
-    
-    if (fOrder==13) {
-        
+    if (fOrder == 13) {        
         fPoints.resize(37, 2);
         fWeights.resize(37);
         
@@ -341,10 +300,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(35,0)= 0.72235779312418802;    fPoints(35,1)= 0.27251581777342965;     fWeights[35]= 0.0047953405017716316;
         fPoints(36,0)= 0.27251581777342965;    fPoints(36,1)= 0.72235779312418802;     fWeights[36]= 0.0047953405017716316;
     }
-    
-    
-    if (fOrder==14) {
-        
+    if (fOrder == 14) {        
         fPoints.resize(46, 2);
         fWeights.resize(46);
         
@@ -394,12 +350,8 @@ int TIntRuleTriangle::NPoints()
         fPoints(43,0)= 0.014624304192623826;   fPoints(43,1)= 0.91420998492962546;       fWeights[43]= 0.0034823316867592063;
         fPoints(44,0)= 0.91420998492962546;    fPoints(44,1)= 0.071165710877750768;      fWeights[44]= 0.0034823316867592063;
         fPoints(45,0)= 0.071165710877750768;   fPoints(45,1)= 0.91420998492962546;       fWeights[45]= 0.0034823316867592063;
-        
     }
-    
-    
-    if (fOrder==15) {
-        
+    if (fOrder == 15) {        
         fPoints.resize(52, 2);
         fWeights.resize(52);
         
@@ -455,12 +407,8 @@ int TIntRuleTriangle::NPoints()
         fPoints(49,0) = 0.010868359489082323;      fPoints(49,1) = 0.91607564403173114;      fWeights[49] =  0.0023071532644835515;
         fPoints(50,0) = 0.91607564403173114;      fPoints(50,1) = 0.073055996479186494;      fWeights[50] =  0.0023071532644835515;
         fPoints(51,0) = 0.073055996479186494;      fPoints(51,1) = 0.91607564403173114;      fWeights[51] =  0.0023071532644835515;
-        
     }
-    
-    
-    if (fOrder==16) {
-        
+    if (fOrder == 16) {        
         fPoints.resize(55, 2);
         fWeights.resize(55);
         
@@ -520,11 +468,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(53,0)= 0.90639484399204151;    fPoints(53,1)= 0.077194371295755432;    fWeights[53]= 0.0036498984697158812;
         fPoints(54,0)= 0.077194371295755432;   fPoints(54,1)= 0.90639484399204151;     fWeights[54]= 0.0036498984697158812;
     }
-    
-    
-    
-    if (fOrder==17) {
-        
+    if (fOrder == 17) {        
         fPoints.resize(61, 2);
         fWeights.resize(61);
         
@@ -590,10 +534,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(59,0)= 0.59886879088323808;    fPoints(59,1)= 0.30358518307132609;       fWeights[59]= 0.013722186996229164;
         fPoints(60,0)= 0.30358518307132609;    fPoints(60,1)= 0.59886879088323808;       fWeights[60]= 0.013722186996229164;
     }
-    
-    
-    if (fOrder==18) {
-        
+    if (fOrder == 18) {        
         fPoints.resize(72, 2);
         fWeights.resize(72);
         
@@ -670,10 +611,7 @@ int TIntRuleTriangle::NPoints()
         fPoints(70,0)= 0.012710460572255469;   fPoints(70,1)= 0.93934508764373181;     fWeights[70]= 0.0021634287304382093;
         fPoints(71,0)= 0.93934508764373181;    fPoints(71,1)= 0.012710460572255469;    fWeights[71]= 0.0021634287304382093;
     }
-    
-    
-    if (fOrder==19) {
-        
+    if (fOrder == 19) {        
         fPoints.resize(73, 2);
         fWeights.resize(73);
         
@@ -751,26 +689,4 @@ int TIntRuleTriangle::NPoints()
         fPoints(71 ,0)= 0.92434425262078401; fPoints(71,1)= 0.065494628082937698;fWeights[71]= 0.001899964427650957;
         fPoints(72 ,0)= 0.065494628082937698; fPoints(72,1)= 0.92434425262078401;fWeights[72]= 0.001899964427650957;
     }
-    
-    return fWeights.size();
 }
-
-void TIntRuleTriangle::Point(int p, VectorXd &co, double &weight)
-{
-    
-    
-    if (p<0||p>=fWeights.size()) {
-        DebugStop();
-    }
-
-    
-    co.resize(2);
-    
-    co[0]=fPoints(p,0);
-    co[1]=fPoints(p,1);
-    
-    weight=fWeights[p];
-    
-    
-}
-

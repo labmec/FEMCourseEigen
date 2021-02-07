@@ -8,6 +8,9 @@
 #ifndef DOF_h
 #define DOF_h
 #include "DataTypes.h"
+#include <iostream>
+
+class CompMesh;
 
 class DOF
 {
@@ -54,6 +57,9 @@ public:
     
     // Return maximum the order of the polinoms associated with DOF
     int GetOrder() const;
+    
+    // Method to print information of DOF elements
+    void Print(const CompMesh &mesh, std::ostream & out = std::cout);
     
 
 };

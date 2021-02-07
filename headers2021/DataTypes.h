@@ -16,12 +16,12 @@
 //#include "TVecNum.h"
 #include <Eigen/Dense>
 
-
-// typedef MatrixXd Matrix;
-// typedef VectorXi VecInt;
-// typedef VectorXd VecDouble;
-
 using namespace Eigen;
+
+typedef Eigen::MatrixXd MatrixDouble ;
+typedef std::vector<int> VecInt;
+typedef Eigen::VectorXd VecDouble;
+
 
 enum MElementType
 {

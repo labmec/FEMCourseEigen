@@ -43,10 +43,10 @@ public:
     virtual CompElement *Clone() const;
     
     // Compute shape functions set at point x
-    virtual void ShapeFunctions(const VecDouble &intpoint, VecDouble &phi, Matrix &dphi) const;
+    virtual void ShapeFunctions(const VecDouble &intpoint, VecDouble &phi, MatrixDouble &dphi) const;
     
-    //
-    void GetMultiplyingCoeficients(VecDouble &coefs);
+    // 
+    virtual void GetMultiplyingCoeficients(VecDouble &coefs) const;
     
     // Return the number of shape functions
     virtual int NShapeFunctions() const;
@@ -73,5 +73,7 @@ public:
     virtual int Dimension() const {
         return Shape::Dimension;
     }
+    
+    virtual void Print(std::ostream &out);
 };
 #endif /* CompElementTemplate_h */

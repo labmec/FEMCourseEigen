@@ -17,64 +17,67 @@
 //
 #include <iostream>
 #include <math.h>
-#include "DataTypes.h"
-#include "tmalha.h"
-#include "telemento1d.h"
-#include "telemento0d.h"
-#include "telementoQuad.h"
-#include "telementoTriangle.h"
-#include "tmaterial1d.h"
-#include "tmaterial2d.h"
-#include "tmaterialbc.h"
-#include "tanalysis.h"
-#include "TIntRule1d.h"
+//#include "GeoNode.h"
+//#include "GeoElement.h"
+//#include "IntPointData.h"
+//#include "CompElement.h"
+#include "CompMesh.h"
+//#include "GeoMesh.h"
+//#include "GeoElement.h"
+//#include "GeoElementTemplate.h"
+//#include "MathStatement.h"
+#include "Poisson.h"
+//#include "L2Projection.h"
+//#include "Analysis.h"
+//#include "IntRule.h"
+//#include "PostProcess.h"
+#include "PostProcessTemplate.h"
 
 #ifdef WIN32
 #define __PRETTY_FUNCTION__ __FUNCTION__
 #endif
 
+class CompMesh;
+
 using std::cout;
 using std::endl;
 using std::cin;
 
-void CreateTestMesh(TMalha &mesh, int order);
-int TestNodes(TMalha *mesh);
-int TestElement(TMalha *mesh);
-int TestMesh(TMalha *mesh);
+void CreateTestMesh(CompMesh &mesh, int order);
+int TestNodes(CompMesh *mesh);
+int TestElement(CompMesh *mesh);
+int TestMesh(CompMesh *mesh);
 
-void CreateTestMesh(TMalha &mesh, int order);
-void CreateTestMeshTR(TMalha &mesh, int order);
-void TestOneDProblem(TMalha *mesh);
+void CreateTestMesh(CompMesh &mesh, int order);
+void CreateTestMeshTR(CompMesh &mesh, int order);
+void TestOneDProblem(CompMesh *mesh);
 
-void exact(VectorXd &point,double &val, VectorXd &deriv);
+void exact(const VecDouble &point,VecDouble &val, MatrixDouble &deriv);
 
 int main ()
 {
     
     
-    TMalha mesh;
+    CompMesh mesh;
     int order = 2;
     //double h=1.; //para dar el tamanho del elemento
     CreateTestMesh(mesh,order);
-	
-    mesh.Print();
-    
-	TAnalysis Analisis(&mesh);
-	Analisis.Run();
-    
-    double energy=0.0,l2=0.0;
-    
-    Analisis.Error(exact, energy, l2);
-    
-    cout<<endl;
-    cout<<energy<<endl;
-    cout<<l2<<endl;
 
-    getchar();
+    mesh.Print();
+
+	Analysis Analisis(&mesh);
+	Analisis.RunSimulation();
+
+    VecDouble vecerr;
+    PostProcessTemplate<Poisson> postprocess;
+    postprocess.SetExact(exact);
+    vecerr = Analisis.PostProcessError(std::cout, postprocess);
+    
     return 0;
 }
 
-void exact(VectorXd &point,double &val, VectorXd &deriv){
+/*
+void exact(const VecDouble &point,VecDouble &val, MatrixDouble &deriv){
     
     
     long double Pi=4*atan(1);
@@ -91,11 +94,11 @@ void exact(VectorXd &point,double &val, VectorXd &deriv){
     
     for(int m=1;m<=mmax;m++){
         for(int n=1;n<=nmax;n++){
-            val+=(4*(-1 + pow(-1,m))*(-1 + pow(-1,n))*sin(m*Pi*point[0])*sin(n*Pi*point[1]))/(m*n*(pow(m,2) + pow(n,2))*pow(Pi,4));
+            val[0]+=(4*(-1 + pow(-1,m))*(-1 + pow(-1,n))*sin(m*Pi*point[0])*sin(n*Pi*point[1]))/(m*n*(pow(m,2) + pow(n,2))*pow(Pi,4));
             
-            deriv[0]+=(4*(-1 + pow(-1,m))*(-1 + pow(-1,n))*cos(m*Pi*point[0])*sin(n*Pi*point[1]))/(n*(pow(m,2) + pow(n,2))*pow(Pi,3));
+            deriv(0,0)+=(4*(-1 + pow(-1,m))*(-1 + pow(-1,n))*cos(m*Pi*point[0])*sin(n*Pi*point[1]))/(n*(pow(m,2) + pow(n,2))*pow(Pi,3));
             
-            deriv[1]+=(4*(-1 + pow(-1,m))*(-1 + pow(-1,n))*cos(n*Pi*point[1])*sin(m*Pi*point[0]))/(m*(pow(m,2) + pow(n,2))*pow(Pi,3));
+            deriv(1,0)+=(4*(-1 + pow(-1,m))*(-1 + pow(-1,n))*cos(n*Pi*point[1])*sin(m*Pi*point[0]))/(m*(pow(m,2) + pow(n,2))*pow(Pi,3));
             
         }
     }
@@ -104,8 +107,10 @@ void exact(VectorXd &point,double &val, VectorXd &deriv){
     
     
 }
+*/
 
-void CreateTestMesh(TMalha &mesh, int order)
+/*
+void CreateTestMesh(CompMesh &mesh, int order)
 {
     double xmin = 0.;
     double xmax = 1.;
@@ -120,12 +125,15 @@ void CreateTestMesh(TMalha &mesh, int order)
     
     int nelem = nelemx*nelemy;
     
-    
+    GeoMesh *gmesh = new GeoMesh;
+    gmesh->SetNumElements(nelem);
     
     int elorder = order;
     int nnodesx = nelemx*elorder + 1;  //nodes en x
     int nnodesy = nelemy*elorder + 1;  //mismo numero de nodes
 	int nnodes = nnodesx*nnodesy;
+    
+    gmesh->SetNumNodes(nnodes);
     
 	int matid = 1;
     double K = 1., B = 0., C[2] = { 0, 0 }, F(1.);  //elemento2d
@@ -136,12 +144,9 @@ void CreateTestMesh(TMalha &mesh, int order)
     int upmatid = -4;
     
     
-    
-    TVec<TNo> &nodevec = mesh.getNodeVec();
-    nodevec.Resize(nnodes);
-    
-	TVecNum<double> coordx(nnodesx);
-	TVecNum<double> coordy(nnodesy);
+        
+	VecDouble coordx(nnodesx);
+	VecDouble coordy(nnodesy);
     
     for (int i=0; i<nnodesx; i++) {
         coordx[i] = xmin + (xmax-xmin)*i*1./(nnodesx-1);
@@ -151,7 +156,7 @@ void CreateTestMesh(TMalha &mesh, int order)
         coordy[j] = ymin + (ymax-ymin)*j*1./(nnodesy - 1);
     }
     
-    TVecNum<double> coord(2);
+    VecDouble coord(2);
     
     for (int i = 0; i < nnodesx; i++)
     {
@@ -159,14 +164,14 @@ void CreateTestMesh(TMalha &mesh, int order)
         {
 			coord[0] = coordx[j];
 			coord[1] = coordy[i];
-			nodevec[nnodesy*i+j].setData(coord);
+            gmesh->Node(nnodesy*i+j).SetCo(coord);
         }
     }
     
     
     
     
-    TVec<TElemento *> &elvec = mesh.getElementVec(); //inicializacao do objeto
+    std::vector<TElemento *> &elvec = mesh.getElementVec(); //inicializacao do objeto
     //elvec.Resize(nelem+4); //nelm elementos de interior + 2 elementos de BC;
     //elvec.Resize(nelem); //por lo pronto sin elementos de contorno;
 	int nelem1D=nelemx*2+nelemy*2;
@@ -250,19 +255,14 @@ void CreateTestMesh(TMalha &mesh, int order)
     mesh.insertMaterial(mat);
     
 	
-	/*MatrixXd stiff, rhs;
-     mesh.getElement(0)->CalcStiff(mesh,stiff,rhs);
-     std::cout<<"matriz rigidez elemeto 0"<<std::endl;
-     stiff.Print();
-     */
 	
 	
 	//condicoes de contorno
     
-	TVecNum<double> nodesxdown(nnodesx);
-    TVecNum<double> nodesxup(nnodesx);
-	TVecNum<double> nodesyleft(nnodesy);
-	TVecNum<double> nodesyright(nnodesy);
+	VecDouble nodesxdown(nnodesx);
+    VecDouble nodesxup(nnodesx);
+	VecDouble nodesyleft(nnodesy);
+	VecDouble nodesyright(nnodesy);
     
     for (int i=0; i<nnodesx; i++)
     {
@@ -339,7 +339,7 @@ void CreateTestMesh(TMalha &mesh, int order)
 }
 
 
-void CreateTestMeshTR(TMalha &mesh, int order)
+void CreateTestMeshTR(CompMesh &mesh, int order)
 {
     double xmin = 0.;
     double xmax = 1.;
@@ -371,11 +371,11 @@ void CreateTestMeshTR(TMalha &mesh, int order)
     
     
     
-    TVec<TNo> &nodevec = mesh.getNodeVec();
+    std::vector<TNo> &nodevec = mesh.getNodeVec();
     nodevec.Resize(nnodes);
     
-	TVecNum<double> coordx(nnodesx);
-	TVecNum<double> coordy(nnodesy);
+	VecDouble coordx(nnodesx);
+	VecDouble coordy(nnodesy);
     
     for (int i=0; i<nnodesx; i++) {
         coordx[i] = xmin + (xmax-xmin)*i*1./(nnodesx-1);
@@ -385,7 +385,7 @@ void CreateTestMeshTR(TMalha &mesh, int order)
         coordy[j] = ymin + (ymax-ymin)*j*1./(nnodesy - 1);
     }
     
-    TVecNum<double> coord(2);
+    VecDouble coord(2);
     
     for (int i = 0; i < nnodesx; i++)
     {
@@ -400,7 +400,7 @@ void CreateTestMeshTR(TMalha &mesh, int order)
     
     
     
-    TVec<TElemento *> &elvec = mesh.getElementVec(); //inicializacao do objeto
+    std::vector<TElemento *> &elvec = mesh.getElementVec(); //inicializacao do objeto
     //elvec.Resize(nelem+4); //nelm elementos de interior + 2 elementos de BC;
     //elvec.Resize(nelem); //por lo pronto sin elementos de contorno;
 	int nelem1D=nelemx*2+nelemy*2;
@@ -496,19 +496,14 @@ void CreateTestMeshTR(TMalha &mesh, int order)
     mesh.insertMaterial(mat);
     
 	
-	/*MatrixXd stiff, rhs;
-     mesh.getElement(0)->CalcStiff(mesh,stiff,rhs);
-     std::cout<<"matriz rigidez elemeto 0"<<std::endl;
-     stiff.Print();
-     */
 	
 	
 	//condicoes de contorno
     
-	TVecNum<double> nodesxdown(nnodesx);
-    TVecNum<double> nodesxup(nnodesx);
-	TVecNum<double> nodesyleft(nnodesy);
-	TVecNum<double> nodesyright(nnodesy);
+	VecDouble nodesxdown(nnodesx);
+    VecDouble nodesxup(nnodesx);
+	VecDouble nodesyleft(nnodesy);
+	VecDouble nodesyright(nnodesy);
     
     for (int i=0; i<nnodesx; i++)
     {
@@ -585,13 +580,13 @@ void CreateTestMeshTR(TMalha &mesh, int order)
 }
 
 
-int TestMesh(TMalha *mesh)
+int TestMesh(CompMesh *mesh)
 {
     int res=0;
     cout << __PRETTY_FUNCTION__ <<endl;
     cout<<"Teste1: Verifica os valores da funcao de forma sob o elemento mestre"<<endl;
     int count=0;
-    TVecNum<double> point(1,0), phi;
+    VecDouble point(1,0), phi;
     MatrixXd dphi;
     int testres=0;
     for (int order=1; order < 5; order++) {
@@ -621,7 +616,6 @@ int TestMesh(TMalha *mesh)
     
     else cout <<"Teste1: Errado" <<endl;
     
-    /**************************************************/
     count=0;
     point[0]=0;
     cout<<"Teste2: Verifica os valores da derivada da funcao de forma (dPhi) sob o elemento mestre."<<endl;
@@ -744,7 +738,6 @@ int TestMesh(TMalha *mesh)
     
     else cout <<"Teste2: Errado" <<endl;
     
-    /**************************************************/
     cout<<"Teste3: Verifica os valores do Jacobiano" <<endl;
     point.setZero();
     count=0;
@@ -782,7 +775,6 @@ int TestMesh(TMalha *mesh)
     
     else cout <<"Teste3: Errado" <<endl;
     
-    /**************************************************/
     cout<<"Teste4: Testa a matriz de rigidez para o elemento1 "<<endl;
     int order = mesh->getElement(0)->getNodeVec().Size()-1;
     
@@ -876,7 +868,7 @@ int TestMesh(TMalha *mesh)
     //Error.Print();
     
     for (int i=0; i<Error.Cols(); i++) {
-        for (int j=0; j<Error.Rows(); j++) {
+        for (int j=0; j<Error.rows(); j++) {
             if (Error(i,j) < 0.001 || Error(i,j) > 0.001) {
                 count++;
             }
@@ -884,13 +876,12 @@ int TestMesh(TMalha *mesh)
         
     }
     
-    if (count == Error.Rows()*Error.Cols()) {
+    if (count == Error.rows()*Error.Cols()) {
         res++;
         cout <<"Teste4: Ok\n";
     }
     else cout <<"Teste4: Errado\n";
     
-    /**************************************************/
     cout<<"Teste5: Testa a assemblagem"<<endl;
     count=0;
     double BigNumber = 1.e12;
@@ -947,7 +938,7 @@ int TestMesh(TMalha *mesh)
     
     RhsError =TestRhs-ProgRhs;
     
-    for (int i=0; i<StiffError.Rows(); i++) {
+    for (int i=0; i<StiffError.rows(); i++) {
         
         if (fabs(RhsError(i,0))< 1.e-9){
             count++;
@@ -966,7 +957,6 @@ int TestMesh(TMalha *mesh)
     
     else cout <<"Teste5: Errado\n";
     
-    /**************************************************/
     cout<<"Teste6: Neuman BC"<<endl;
     count = 0;
     
@@ -992,7 +982,7 @@ int TestMesh(TMalha *mesh)
 }
 
 //criacao de um ponteiro
-int TestElement(TMalha *mesh)
+int TestElement(CompMesh *mesh)
 {
     cout << __PRETTY_FUNCTION__ <<endl;
     
@@ -1000,14 +990,14 @@ int TestElement(TMalha *mesh)
     int res=0, count=0;
     int NElements = mesh->getElementVec().Size()-2;
     
-    TVec<TNo> nodes = mesh->getNodeVec();
+    std::vector<TNo> nodes = mesh->getNodeVec();
     
-    cout<<"Teste1: Acesso a TVec<TElemento> em posicao inexistente."<<endl;
+    cout<<"Teste1: Acesso a std::vector<TElemento> em posicao inexistente."<<endl;
     int count1=0;
     
     for (int el=0; el < NElements; el++) {
         for (int index=0; index<=order; index++) {
-            if (mesh->getElement(el)->getNodeVec().GetVal(index)==el*(order)+index){
+            if (mesh->getElement(el)->getNodeVec()(index)==el*(order)+index){
                 count1++;
             }
         }
@@ -1028,7 +1018,7 @@ int TestElement(TMalha *mesh)
     cout<<"Teste2: Testa a funcionalidade dos indices de TElemento com TNo."<<endl;
     for (int el=0; el<NElements; el++) {
         for (int index=0; index<=order; index++) {
-            if (nodes[(order)*el+index].Co(0) == nodes[mesh->getElement(el)->getNodeVec().GetVal(index)].Co(0) ) {
+            if (nodes[(order)*el+index].Co(0) == nodes[mesh->getElement(el)->getNodeVec()(index)].Co(0) ) {
                 count1++;
             }
         }
@@ -1052,7 +1042,7 @@ int TestElement(TMalha *mesh)
     return res;
 }
 
-int TestNodes(TMalha *mesh)
+int TestNodes(CompMesh *mesh)
 {
     cout << __PRETTY_FUNCTION__ <<endl;
     
@@ -1064,7 +1054,7 @@ int TestNodes(TMalha *mesh)
     int NElements = mesh->getElementVec().Size()-2;
     int nnodes = NElements*order+1;
     
-    TVec<TNo> nodes = mesh->getNodeVec();
+    std::vector<TNo> nodes = mesh->getNodeVec();
     cout << "Teste1: Verificacao de acesso para node.Co[negativa e maior 1]." <<endl;
     try {
         nodes[0].Co(-1);
@@ -1123,7 +1113,7 @@ int TestNodes(TMalha *mesh)
 }
 
 
-void TestOneDProblem(TMalha *mesh)
+void TestOneDProblem(CompMesh *mesh)
 {
     int answer=0;
     
@@ -1139,3 +1129,4 @@ void TestOneDProblem(TMalha *mesh)
     }
     
 }
+*/

@@ -9,14 +9,12 @@
 #define GeoElement_h
 
 #include "DataTypes.h"
-#include "GeoElementSide.h"
-#include "CompElement.h"
-#include "CompElementTemplate.h"
-#include "Shape1d.h"
-#include "ShapeQuad.h"
-#include "ShapeTriangle.h"
-#include "ShapeTetrahedron.h"
-#include "GeoMesh.h"
+
+class CompMesh;
+
+class CompElement;
+
+class GeoElementSide;
 
 class GeoMesh;
 
@@ -124,16 +122,18 @@ public:
         return Index;
     }
     
+    virtual int SideIsUndefined(int side) = 0;
+    
     virtual int WhichSide(VecInt &SideNodeIds) = 0;
     
     // Compute x mapping from local parametric coordinates
     virtual void X(const VecDouble &xi,  VecDouble &x) = 0;
     
     // Compute gradient of x mapping from local parametric coordinates
-    virtual void GradX(const VecDouble &xi, VecDouble &x, Matrix &gradx) = 0;
+    virtual void GradX(const VecDouble &xi, VecDouble &x, MatrixDouble &gradx) = 0;
     
     // Compute a QR facotrization of the gradient of the mapping function, Q = Jacobian and R = axes
-    virtual void Jacobian(const Matrix &gradx, Matrix &jac,Matrix &axes, double &detjac, Matrix &jacinv) = 0;
+    virtual void Jacobian(const MatrixDouble &gradx, MatrixDouble &jac,MatrixDouble &axes, double &detjac, MatrixDouble &jacinv) = 0;
     
     // Function to print results
     virtual void Print(std::ostream &out);

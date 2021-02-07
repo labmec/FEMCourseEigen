@@ -10,11 +10,15 @@
 
 #include "DataTypes.h"
 #include "IntRule.h"
-#include "IntPointData.h"
+//#include "IntPointData.h"
+//#include "PostProcess.h"
+#include <functional>
 
 class CompMesh;
 class GeoElement;
 class MathStatement;
+class PostProcess;
+class IntPointData;
 
 class CompElement
 {
@@ -94,20 +98,24 @@ public:
     void ComputeRequiredData(IntPointData &data, VecDouble &intpoint) const;
     
     // Convert a shapefunction derivative in xi-eta to a function derivative in axes
-    void Convert2Axes(const Matrix &dphi, const Matrix &jacinv, Matrix &dphidx) const;
+    void Convert2Axes(const MatrixDouble &dphi, const MatrixDouble &jacinv, MatrixDouble &dphidx) const;
     
     // Compute the element stifness matrix and force vector
-    virtual void CalcStiff(Matrix &ek, Matrix &ef) const;
+    virtual void CalcStiff(MatrixDouble &ek, MatrixDouble &ef) const;
+    
+    // Compute error and exact solution
+    virtual void EvaluateError(std::function<void(const VecDouble &loc,VecDouble &val,MatrixDouble &deriv)> fp,
+                               VecDouble &errors) const;
     
     // Compute shape functions set at point x
-    virtual void ShapeFunctions(const VecDouble &intpoint, VecDouble &phi, Matrix &dphi) const = 0;
+    virtual void ShapeFunctions(const VecDouble &intpoint, VecDouble &phi, MatrixDouble &dphi) const = 0;
     
     // Compute the solution and its gradient at a parametric point
     // for dsol the row indicates the direction, the column indicates the state variable
-    virtual void Solution(const VecDouble &intpoint, VecDouble &sol, MatrixXd &dsol) const;
+    virtual void Solution(VecDouble &intpoint, int var, VecDouble &sol) const;
     
-    /// Compute the error of the finite element approximation
-    double ComputeError(std::function<void(const VecDouble &co, VecDouble &sol, Matrix &dsol)> &exact,  VecDouble &errors);
+    // Get Multiplying Coeficients
+    virtual void GetMultiplyingCoeficients(VecDouble &coefs) const = 0;
     
     // Return the number of shape functions
     virtual int NShapeFunctions() const = 0;
@@ -132,5 +140,9 @@ public:
     
     // Return the dimension of the element
     virtual int Dimension() const = 0;
+    
+    // Method to print computational element information
+    virtual void Print(std::ostream &out) = 0;
+    
 };
 #endif /* CompElement_h */

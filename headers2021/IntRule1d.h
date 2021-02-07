@@ -28,7 +28,7 @@ public:
     virtual void SetOrder(int order);
     
     // Integration rule 1D method obtained from Numerical Recipes
-    void gauleg(const double x1, const double x2, VectorXd &x, VectorXd &w);
+    void gauleg(const double x1, const double x2, VecDouble &x, VecDouble &w);
     
 };
 

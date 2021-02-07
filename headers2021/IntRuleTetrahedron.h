@@ -10,8 +10,6 @@
 #define __FemSC__IntRuleTetrahedron__
 
 #include <stdio.h>
-#include "TVec.h"
-#include <Eigen/Dense>
 #include "IntRule.h"
 
 class IntRuleTetrahedron : public IntRule

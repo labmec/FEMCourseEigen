@@ -4,9 +4,9 @@ cmake_minimum_required (VERSION 2.8.0)
 
 project (FemCourse)
 
-add_subdirectory(headers)
+#add_subdirectory(headers)
 add_subdirectory(headers2021)
-add_subdirectory("src vazio")
+#add_subdirectory("src vazio")
 add_subdirectory(src_2021)
 add_subdirectory(tinyxml)
 
@@ -14,13 +14,12 @@ add_subdirectory(tinyxml)
 #Specify where the headers files must be found
 include_directories(
 	"${PROJECT_SOURCE_DIR}/headers2021"
-	"${PROJECT_SOURCE_DIR}/headers"
 	"${PROJECT_SOURCE_DIR}/tinyxml"
 )
 
 ## inserting main definitions
 #specifying the path to FemSC source code
-set(FemSCSOURCE ${FemSC_SRCS} ${FemSC_tinyxml} ${FemSC_HEAD})
+#set(FemSCSOURCE ${FemSC_SRCS} ${FemSC_tinyxml} ${FemSC_HEAD})
 
 set(FemSOURCE2021 ${BASIC_TYPES} ${FemSC_tinyxml} ${HEADERS2021})
 

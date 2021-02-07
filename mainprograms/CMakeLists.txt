@@ -7,11 +7,14 @@ add_executable(Fem2021 main2021.cpp ${FemSOURCE2021} ${SOURCES2021})
 target_link_libraries (Fem2021 Eigen3::Eigen)
 
 # NEED TO CHECK THESE TARGETS
-# add_executable(TestIntegrate TestIntegrate.cpp ${FemSCSOURCE})
+add_executable(TestIntegrate TestIntegrate.cpp ${FemSCSOURCE})
+target_link_libraries (TestIntegrate Eigen3::Eigen)
 
-# add_executable(TestOneDProblem TestOneDProblem.cpp ${FemSCSOURCE})
+add_executable(TestOneDProblem TestOneDProblem.cpp ${FemSCSOURCE})
+target_link_libraries (TestOneDProblem Eigen3::Eigen)
 
-# add_executable(TestTwoDProblem TestTwoDProblem.cpp ${FemSCSOURCE})
+add_executable(TestTwoDProblem TestTwoDProblem.cpp ${FemSCSOURCE})
+target_link_libraries (TestTwoDProblem Eigen3::Eigen)
 
 # add_executable(TesMatrixXd TesMatrixXd.cpp ${FemSCSOURCE})
 # target_link_libraries (TesMatrixXd Eigen3::Eigen)

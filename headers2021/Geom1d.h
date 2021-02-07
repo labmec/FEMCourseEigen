@@ -28,13 +28,13 @@ public:
     Geom1d &operator=(const Geom1d &copy);
     
     // Computes the shape functions associated with the geometric map
-    static void Shape(const VecDouble &xi, VecDouble &phi, Matrix &dphi);
+    static void Shape(const VecDouble &xi, VecDouble &phi, MatrixDouble &dphi);
     
     // Computes the value of x for a given point in parameter space as a function of corner coordinates
-    static void X(const VecDouble &xi, Matrix &NodeCo, VecDouble &x);
+    static void X(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble &x);
     
     // Computes the value of x and gradx for a given point in parameter space
-    static void GradX(const VecDouble &xi, Matrix &NodeCo, VecDouble &x, Matrix &gradx);
+    static void GradX(const VecDouble &xi, MatrixDouble &NodeCo, VecDouble &x, MatrixDouble &gradx);
     
     // Return the number of nodes of the template
     static int NumNodes();

@@ -9,9 +9,9 @@
 #define GeoMesh_h
 
 #include "GeoNode.h"
-#include "GeoElement.h"
-#include "CompMesh.h"
 #include <string>
+class CompMesh;
+class GeoElement;
 
 class GeoMesh
 {

@@ -10,16 +10,21 @@
 
 #include "DataTypes.h"
 #include "IntPointData.h"
+#include "PostProcess.h"
 
 class MathStatement
 {
+    
+    int MathDim;
+    
     // Math statement ID
     int matid = 0;
     
-    // Number of state variable
-    int nstate = 0;
-    
 public:
+    
+//    enum PostProcVar;
+    
+    static double gBigNumber;
     
     // Constructor of MathStatement
     MathStatement();
@@ -37,13 +42,42 @@ public:
     virtual MathStatement *Clone() const = 0;
     
     // Return the number of state variables
-    virtual int NState() const = 0;
+    virtual int NState() const =0;
+    
+    // Return the number of errors
+    virtual int NEvalErrors() const = 0;
     
     // Method to implement integral over element's volume
-    virtual void Contribute(IntPointData &integrationpointdata, Matrix &EK, Matrix &EF) const = 0;
+    virtual void Contribute(IntPointData &integrationpointdata, double weight, MatrixDouble &EK, MatrixDouble &EF) const = 0;
     
-    // Method to compute the contribution to the error norm
-    virtual void ContributeError(IntPointData &integrationpointdata, std::function<void(const VecDouble &co, VecDouble &sol, Matrix &dsol)> &exact);
+    // Method to implement error over element's volume
+    virtual void ContributeError(IntPointData &integrationpointdata, VecDouble &u_exact, MatrixDouble &du_exact, VecDouble &errors) const = 0;
+    
+    virtual void SetMatID(int indexmat){
+        matid = indexmat;
+    }
+    
+    virtual int GetMatID(){
+        return matid;
+    }
+
+    virtual void SetDimension(int dim){
+        MathDim = dim;
+    };
+    
+    virtual int Dimension() const{
+        return MathDim;
+    };
+    
+    // Prepare and print post processing data
+    virtual void PostProcessSolution(const IntPointData &integrationpointdata, const int var, VecDouble &sol) const = 0;
+    
+    
+    virtual void Axes2XYZ(const MatrixDouble &dudaxes, MatrixDouble &dudx, const MatrixDouble &axesv, bool colMajor = true) const;
+    
+    //Method to print MathStatement
+    virtual void Print(std::ostream &out);
+    
     
 };
 #endif /* MathStatement_h */

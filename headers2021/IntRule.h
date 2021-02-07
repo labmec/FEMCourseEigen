@@ -22,10 +22,10 @@ protected:
     int fOrder;
     
     // Number of integration points for this object
-    MatrixXd fPoints;
+    MatrixDouble fPoints;
     
     // Weight of the integration point
-    VectorXd fWeights;
+    VecDouble fWeights;
 
 public:
   
@@ -60,10 +60,10 @@ public:
     virtual int NPoints() const;
     
     // Function returning coordinates and weights of integration points
-    virtual void Point(int p, VectorXd &co, double &weight) const;
+    virtual void Point(int p, VecDouble &co, double &weight) const;
     
     // Function for printing results
-    void Print(std::ostream &out) const;
+    virtual void Print(std::ostream &out);
     
 };
 

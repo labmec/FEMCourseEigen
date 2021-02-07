@@ -29,7 +29,7 @@ class IntRuleQuad : public IntRule
     virtual void SetOrder(int order);
   
     // Integration rule 2D (quadrilateral elements) method obtained from Numerical Recipes
-    void gaulegQuad(const double x1, const double x2, VectorXd &x, VectorXd &w);
+    void gaulegQuad(const double x1, const double x2, VecDouble &x, VecDouble &w);
 
 };
 

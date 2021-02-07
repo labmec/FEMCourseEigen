@@ -20,6 +20,9 @@ protected:
     // Definition of an element type
     TGeom Geom;
     
+    // Index in the vector
+    int Index;
+    
 public:
     
     // Constructor of GeoElementTemplate
@@ -98,16 +101,17 @@ public:
     virtual void X(const VecDouble &xi, VecDouble &x);
     
     // Compute gradient of x mapping from local parametric coordinates
-    virtual void GradX(const VecDouble &xi, VecDouble &x, Matrix &gradx);
+    virtual void GradX(const VecDouble &xi, VecDouble &x, MatrixDouble &gradx);
     
     /** @brief Compute a QR facotrization of the gradient of the mapping function, Q = Jacobian and R = axes  */
-    virtual void Jacobian(const Matrix &gradx, Matrix &jac,Matrix &axes, double &detjac, Matrix &jacinv);
+    virtual void Jacobian(const MatrixDouble &gradx, MatrixDouble &jac,MatrixDouble &axes, double &detjac, MatrixDouble &jacinv);
+    
+    virtual int SideIsUndefined(int side);
     
     virtual int WhichSide(VecInt &SideNodeIds);
     
     // Function to print results
     virtual void Print(std::ostream &out);
-    
 
 };
 
