@@ -19,7 +19,7 @@
 using namespace Eigen;
 
 typedef Eigen::MatrixXd MatrixDouble ;
-typedef std::vector<int> VecInt;
+typedef Eigen::VectorXi VecInt;
 typedef Eigen::VectorXd VecDouble;
 
 

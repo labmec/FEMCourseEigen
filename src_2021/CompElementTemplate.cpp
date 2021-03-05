@@ -95,7 +95,7 @@ void CompElementTemplate<Shape>::ShapeFunctions(const VecDouble &intpoint, VecDo
     VecInt orders(nsides, order);
 
     Shape::Shape(intpoint, orders, phi, dphi);
-    orders.clear();
+    orders.resize(0);
 }
 
 template<class Shape>
@@ -116,7 +116,7 @@ void CompElementTemplate<Shape>::GetMultiplyingCoeficients(VecDouble & coefs) co
             ni++;
         }
     }
-    iglob.clear();
+    iglob.resize(0);
 }
 
 template<class Shape>
@@ -126,7 +126,7 @@ int CompElementTemplate<Shape>::NShapeFunctions() const {
     VecInt orders(nsides, order);
 
     return Shape::NShapeFunctions(orders);
-    orders.clear();
+    orders.resize(0);
 }
 
 template<class Shape>

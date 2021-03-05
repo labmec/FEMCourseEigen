@@ -10,6 +10,7 @@
 
 #include "GeoElement.h"
 #include "GeoElementSide.h"
+#include "DataTypes.h"
 
 template<class TGeom>
 class GeoElementTemplate : public GeoElement

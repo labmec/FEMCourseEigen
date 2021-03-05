@@ -71,7 +71,7 @@ void GeoElementSide::ComputeNeighbours(std::vector<GeoElementSide> &compneigh) {
     std::vector<std::vector<int> > GeoElSet;
     GeoElSet.resize(27);
     int in;
-    std::vector<int> nodeindexes(nsnodes);
+    VecInt nodeindexes(nsnodes);
     for (in = 0; in < nsnodes; in++) {
         nodeindexes[in] = fElement->NodeIndex(fElement->SideNodeIndex(fSide, in));
         int locnod = fElement->SideNodeIndex(fSide, in);
@@ -138,7 +138,7 @@ void GeoElementSide::ComputeNeighbours(std::vector<GeoElementSide> &compneigh) {
     }
     GeoElSideSet.clear();
     GeoElSet.clear();
-    nodeindexes.clear();
+    nodeindexes.resize(0);
     result.clear();
     result_aux.clear();
 

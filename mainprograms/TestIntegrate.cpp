@@ -108,7 +108,7 @@ int main ()
         VecDouble coord;
         
         NPoint = TestInt3.NPoints();
-        VectorXi nodes(NPoint);
+        VecInt nodes(NPoint);
         
         mesh.SetNumElements(1);
         
@@ -138,7 +138,7 @@ int main ()
     //   while(fabs(val3-239.49661609) >= 1.e-5) {
     IntRuleQuad TestInt4(order);
     NPoint = TestInt4.NPoints();
-    VectorXi nodes4(NPoint);
+    VecInt nodes4(NPoint);
     mesh.SetNumElements(1);
     
     for (int i=0; i<NPoint; i++) {
