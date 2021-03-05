@@ -1,0 +1,10 @@
+# Add whatever pattern you wish to ignore in git
+build
+
+.vscode
+.vs
+.DS_Store
+.idea
+*.icloud
+
+headers2021/Eigen
