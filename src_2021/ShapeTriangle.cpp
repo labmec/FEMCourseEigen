@@ -64,6 +64,9 @@ int ShapeTriangle::NShapeFunctions(int side, int order) {
         case 6:
             return order - 1;
     }
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return -1;
 }
 
 int ShapeTriangle::NShapeFunctions(VecInt &orders) {

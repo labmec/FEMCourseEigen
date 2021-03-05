@@ -107,17 +107,28 @@ void L2Projection::ContributeError(IntPointData &data, VecDouble &u_exact, Matri
 int L2Projection::VariableIndex(const PostProcVar var) const {
     if (var == ESol) return ESol;
     if (var == EDSol) return EDSol;
+
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return 0;
 }
 
 L2Projection::PostProcVar L2Projection::VariableIndex(const std::string & name) {
     if (!strcmp("Solution", name.c_str())) return ESol;
     if (!strcmp("Derivative", name.c_str())) return EDSol;
+
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return ENone;
 }
 
 int L2Projection::NSolutionVariables(const PostProcVar var) {
     if (var == ESol) return this->NState();
     if (var == EDSol) return this->NState();
 
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return 0;
 }
 
 void L2Projection::PostProcessSolution(const IntPointData &integrationpointdata, const int var, VecDouble &sol) const {

@@ -13,15 +13,15 @@
 #include <exception>
 
 #ifdef USING_MKL
-#include "pzerror.h"
+// #include "pzerror.h" // This is a NeoPZ file, and should be dependent on its linking
 #else
 
 static void DebugStop()
 {
-    std::cout << "Your chance to put a breakpoint here\n";
+    std::cout << "\nYour chance to put a breakpoint here\n" << std::flush;
     std::bad_exception myex;
     throw myex;
 
 }
-#endif
-#endif
+#endif // USING_MKL
+#endif // FemSC_Panic_h

@@ -55,6 +55,9 @@ int Poisson::VariableIndex(const PostProcVar var) const {
     if (var == EForce) return EForce;
     if (var == ESolExact) return ESolExact;
     if (var == EDSolExact) return EDSolExact;
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return -1;
 }
 
 Poisson::PostProcVar Poisson::VariableIndex(const std::string &name) {
@@ -67,6 +70,9 @@ Poisson::PostProcVar Poisson::VariableIndex(const std::string &name) {
     else {
         std::cout << "variable not implemented" << std::endl;
     }
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return ENone;
 }
 
 int Poisson::NSolutionVariables(const PostProcVar var) {
@@ -79,7 +85,9 @@ int Poisson::NSolutionVariables(const PostProcVar var) {
     else {
         std::cout << "variable not implemented" << std::endl;
     }
-
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return -1;
 }
 
 void Poisson::ContributeError(IntPointData &data, VecDouble &u_exact, MatrixDouble &du_exact, VecDouble &errors) const {

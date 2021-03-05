@@ -56,7 +56,9 @@ CompElement *GeoElement::CreateCompEl(CompMesh *mesh, int64_t index) {
         default:
             DebugStop();
     }
-
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return NULL;
 }
 
 void GeoElement::Print(std::ostream &out) {

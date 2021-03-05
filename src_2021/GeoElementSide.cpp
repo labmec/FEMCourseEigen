@@ -148,4 +148,5 @@ void GeoElementSide::ComputeNeighbours(std::vector<GeoElementSide> &compneigh) {
 bool GeoElementSide::DataConsistency(GeoElementSide &candidate) {
     std::cout << "Not implemented" << std::endl;
     DebugStop();
+    return false;
 }

@@ -83,7 +83,9 @@ int ShapeQuad::NShapeFunctions(int side, int order) {
     if (side == 8) {
         return ((order - 1)*(order - 1));
     }
-
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return -1;
 }
 
 int ShapeQuad::NShapeFunctions(VecInt &orders) {

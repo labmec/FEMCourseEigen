@@ -100,6 +100,9 @@ int ShapeTetrahedron::NShapeFunctions(int side, int order) {
         }
         return totsum;
     }
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return -1;
 }
 
 int ShapeTetrahedron::NShapeFunctions(VecInt &orders) {

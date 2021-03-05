@@ -60,7 +60,9 @@ int Shape1d::NShapeFunctions(int side, int order) {
     if (side < 3) {
         return (order - 1);
     }
-
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return -1;
 }
 
 int Shape1d::NShapeFunctions(VecInt &orders) {

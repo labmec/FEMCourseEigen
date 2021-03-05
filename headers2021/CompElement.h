@@ -56,7 +56,7 @@ public:
     ~CompElement();
     
     // Method for creating a copy of the element
-    virtual CompElement *Clone() const;
+    virtual CompElement *Clone() const = 0;
     
     // Return the material object associated with the element
     MathStatement *GetStatement() const;

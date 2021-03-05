@@ -15,6 +15,7 @@
 #include <functional>
 //#include "TVecNum.h"
 #include <Eigen/Dense>
+#include "tpanic.h"
 
 using namespace Eigen;
 

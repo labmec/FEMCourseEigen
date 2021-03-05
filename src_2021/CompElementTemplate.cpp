@@ -127,6 +127,9 @@ int CompElementTemplate<Shape>::NShapeFunctions() const {
 
     return Shape::NShapeFunctions(orders);
     orders.resize(0);
+    // Code should not reach this point. This return is only here to stop compiler warnings.
+    DebugStop();
+    return -1;
 }
 
 template<class Shape>

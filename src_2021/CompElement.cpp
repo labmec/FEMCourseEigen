@@ -40,9 +40,9 @@ CompElement &CompElement::operator=(const CompElement &copy) {
 CompElement::~CompElement() {
 }
 
-CompElement *CompElement::Clone() const {
-    //     return new CompElement(*this);
-}
+// CompElement *CompElement::Clone() const {
+//     return new CompElement(*this);
+// }
 
 MathStatement *CompElement::GetStatement() const {
     return mat;
